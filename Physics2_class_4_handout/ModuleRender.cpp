@@ -9,7 +9,7 @@ ModuleRender::ModuleRender(Application* app, bool start_enabled) : Module(app, s
 {
 	renderer = NULL;
 	camera.x = 0;
-	camera.y = 400;
+	camera.y = 0;
 	camera.w = SCREEN_WIDTH;
 	camera.h = SCREEN_HEIGHT;
 }
