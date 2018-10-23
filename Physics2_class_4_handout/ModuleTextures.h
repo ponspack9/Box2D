@@ -2,12 +2,14 @@
 #include "Module.h"
 #include "Globals.h"
 #include "p2List.h"
+#include "p2Point.h"
 #include "SDL\include\SDL.h"
 
 struct Sprite {
 
 	SDL_Texture* texture = nullptr;
 	SDL_Rect rect;
+	iPoint Position;
 };
 
 class ModuleTextures : public Module

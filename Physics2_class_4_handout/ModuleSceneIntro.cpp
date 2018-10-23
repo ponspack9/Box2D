@@ -24,7 +24,7 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = 0;
-	App->renderer->camera.y = 0;
+	App->renderer->camera.y = -100;
 
 	circle = App->textures->Load("pinball/wheel.png"); 
 	box = App->textures->Load("pinball/crate.png");
@@ -46,12 +46,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
-		App->renderer->camera.y-=5;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
-		App->renderer->camera.y+=5;
-	}
+
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
