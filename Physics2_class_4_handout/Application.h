@@ -13,20 +13,22 @@ class ModulePlayer;
 class ModuleSceneIntro;
 class ModulePhysics;
 class Pinball;
+class ModuleFadeToBlack;
 
 
 class Application
 {
 public:
-	ModuleRender* renderer;
-	ModuleWindow* window;
-	ModuleTextures* textures;
-	ModuleInput* input;
-	ModuleAudio* audio;
-	ModulePlayer* player;
-	ModuleSceneIntro* scene_intro;
-	ModulePhysics* physics;
-	Pinball*	pinball;
+	ModuleRender*		renderer;
+	ModuleWindow*		window;
+	ModuleTextures*		textures;
+	ModuleInput*		input;
+	ModuleAudio*		audio;
+	ModulePlayer*		player;
+	ModuleSceneIntro*	scene_intro;
+	ModulePhysics*		physics;
+	Pinball*			pinball;
+	ModuleFadeToBlack*  fade;
 
 private:
 

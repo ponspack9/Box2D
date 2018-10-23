@@ -5,6 +5,7 @@
 #include "Pinball.h"
 #include "ModuleRender.h"
 #include "ModuleInput.h"
+#include "ModuleFadeToBlack.h"
 
 
 Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabled){
@@ -22,7 +23,7 @@ Pinball::~Pinball()
 }
 
 bool Pinball::Start() {
-
+	LOG("Starting pinball");
 	Background.texture = App->textures->Load("Sprites/Background.png");
 
 	Orange_Active.texture = App->textures->Load("Sprites/Orange_Active.png");
@@ -67,21 +68,8 @@ update_status Pinball::Update()
 		}
 	}
 
-	/*
-	int speed = 3;
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	App->renderer->camera.y += speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	App->renderer->camera.y -= speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	App->renderer->camera.x += speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	App->renderer->camera.x -= speed;
-	*/
+	Draw();
 	return UPDATE_CONTINUE;
 }
 

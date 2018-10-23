@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModuleFadeToBlack.h"
 #include "Pinball.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -56,6 +57,11 @@ update_status ModuleSceneIntro::Update()
 	{
 		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
 	}
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		App->fade->FadeToBlack(this, App->pinball);
+	}
+	
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
@@ -135,7 +141,7 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	App->pinball->Draw();
+	/*App->pinball->Draw();*/
 
 	return UPDATE_CONTINUE;
 }
