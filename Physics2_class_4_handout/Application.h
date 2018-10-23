@@ -14,6 +14,7 @@ class ModuleSceneIntro;
 class ModulePhysics;
 class Pinball;
 class ModuleFadeToBlack;
+class Colliders;
 
 
 class Application
@@ -29,6 +30,7 @@ public:
 	ModulePhysics*		physics;
 	Pinball*			pinball;
 	ModuleFadeToBlack*  fade;
+	Colliders*			colliders;
 
 private:
 

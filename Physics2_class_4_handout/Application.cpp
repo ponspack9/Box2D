@@ -10,6 +10,7 @@
 #include "ModuleSceneIntro.h"
 #include "Pinball.h"
 #include "ModuleFadeToBlack.h"
+#include "Colliders.h"
 
 #include "Application.h"
 
@@ -25,6 +26,7 @@ Application::Application()
 	physics		= new ModulePhysics(this);
 	pinball		= new Pinball(this);
 	fade		= new ModuleFadeToBlack(this);
+	colliders	= new Colliders(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -40,9 +42,10 @@ Application::Application()
 	
 	AddModule(pinball);
 	AddModule(scene_intro);
+	AddModule(colliders);
 	AddModule(fade);
 	// Scenes
-	pinball->Disable();
+	//pinball->Disable();
 	
 	// Player
 	AddModule(player);

@@ -6,6 +6,7 @@
 #include "ModuleRender.h"
 #include "ModuleInput.h"
 #include "ModuleFadeToBlack.h"
+#include "ModulePhysics.h"
 
 
 Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabled){
