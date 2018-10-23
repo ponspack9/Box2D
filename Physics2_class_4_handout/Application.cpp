@@ -9,20 +9,22 @@
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
 #include "Pinball.h"
+#include "ModuleFadeToBlack.h"
 
 #include "Application.h"
 
 Application::Application()
 {
-	renderer = new ModuleRender(this);
-	window = new ModuleWindow(this);
-	textures = new ModuleTextures(this);
-	input = new ModuleInput(this);
-	audio = new ModuleAudio(this, true);
-	player = new ModulePlayer(this);
+	renderer	= new ModuleRender(this);
+	window		= new ModuleWindow(this);
+	textures	= new ModuleTextures(this);
+	input		= new ModuleInput(this);
+	audio		= new ModuleAudio(this, true);
+	player		= new ModulePlayer(this);
 	scene_intro = new ModuleSceneIntro(this);
-	physics = new ModulePhysics(this);
-	pinball = new Pinball(this);
+	physics		= new ModulePhysics(this);
+	pinball		= new Pinball(this);
+	fade		= new ModuleFadeToBlack(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -35,10 +37,12 @@ Application::Application()
 	AddModule(textures);
 	AddModule(input);
 	AddModule(audio);
-	AddModule(pinball);
 	
-	// Scenes
+	AddModule(pinball);
 	AddModule(scene_intro);
+	AddModule(fade);
+	// Scenes
+	pinball->Disable();
 	
 	// Player
 	AddModule(player);

@@ -10,7 +10,7 @@ struct Sprite;
 class Pinball: public Module
 {
 public:
-	Pinball(Application* app, bool start_enabled = true);
+	Pinball(Application* app, bool start_enabled=true);
 	~Pinball();
 
 	bool Start();
