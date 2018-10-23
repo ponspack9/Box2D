@@ -22,6 +22,10 @@ public:
 
 private :
 
+	bool StartState = true;
+	bool Spring_Activated = false;
+
+	int Spring_Position;
 	int Initial_Spring_Position;
 	int Velocity_Spring;
 

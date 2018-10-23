@@ -4,7 +4,7 @@
 #include "ModuleWindow.h"
 #include "Pinball.h"
 #include "ModuleRender.h"
-#include ""
+#include "ModuleInput.h"
 
 
 Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabled){
@@ -34,12 +34,38 @@ bool Pinball::Start() {
 	Spring.texture = App->textures->Load("Sprites/Spring.png");
 	Initial_Tube.texture = App->textures->Load("Sprites/Initial_Tube.png");
 	KickerActive.texture = App->textures->Load("Sprites/Kicker_Active.png");
+
+	Spring.Position.y = 1022;
+
+	Velocity_Spring = 4;
+
 	return true;
 }
 
 update_status Pinball::Update()
 {
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	//Spring Llogic
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+		
+		if (Spring.Position.y <= 1140) {
+			Spring_Activated = true;
+			Spring.Position.y += 3;
+			Velocity_Spring = 4;
+		}
+	}
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
+		Spring_Activated = false;
+
+	}
+	 if (!Spring_Activated){
+		if (Spring.Position.y >= 1022) {
+			Spring.Position.y -= Velocity_Spring;
+			Velocity_Spring += 2;
+		}
+		if (Spring.Position.y < 1022) {
+			Spring.Position.y = 1022;
+		}
+	}
 
 	/*
 	int speed = 3;
@@ -66,7 +92,7 @@ bool Pinball::Draw() {
 	App->renderer->Blit(Background.texture, 0, 0, &Background.rect);
 
 	//Spring
-	App->renderer->Blit(Spring.texture, 584, 1022, &Spring.rect);
+	App->renderer->Blit(Spring.texture, 584, Spring.Position.y, &Spring.rect);
 
 	//Box Points activated
 	App->renderer->Blit(Yellow_Active.texture, 143, 693, &Yellow_Active.rect);
