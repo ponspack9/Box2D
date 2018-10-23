@@ -4,6 +4,7 @@
 #include "ModuleWindow.h"
 #include "Pinball.h"
 #include "ModuleRender.h"
+#include ""
 
 
 Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabled){
@@ -36,7 +37,27 @@ bool Pinball::Start() {
 	return true;
 }
 
+update_status Pinball::Update()
+{
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 
+	/*
+	int speed = 3;
+
+	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	App->renderer->camera.y += speed;
+
+	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	App->renderer->camera.y -= speed;
+
+	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	App->renderer->camera.x += speed;
+
+	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	App->renderer->camera.x -= speed;
+	*/
+	return UPDATE_CONTINUE;
+}
 
 bool Pinball::Draw() {
 
