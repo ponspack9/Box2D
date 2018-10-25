@@ -31,12 +31,23 @@ private :
 
 
 	Sprite Background;
+	Sprite Top_Score_Bar;
+	Sprite Black_Part_Top_Score;
+
+	Sprite Bonus_Girl_Boy_Message;
+
 	Sprite Yellow_Active;
 	Sprite Pink_Active;
 	Sprite Red_Active;
 	Sprite Blue_Active;
 	Sprite Green_Active;
 	Sprite Orange_Active;
+	Sprite Girl_Active;
+	Sprite Boy_Active;
+	Sprite Green_Box_Active;
+
+	Sprite Top_Left_Bonus_Machine;
+
 	
 	
 	Sprite Spring;
