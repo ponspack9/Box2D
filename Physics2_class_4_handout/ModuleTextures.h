@@ -10,6 +10,7 @@ struct Sprite {
 	SDL_Texture* texture = nullptr;
 	SDL_Rect rect;
 	iPoint Position;
+	fPoint Angle;
 };
 
 class ModuleTextures : public Module

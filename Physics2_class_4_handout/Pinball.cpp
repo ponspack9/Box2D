@@ -16,6 +16,11 @@ Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabl
 
 	//Messages 
 	Bonus_Girl_Boy_Message.rect = { 0,0,844,34 };
+	Bonus_AllBoxes_Message.rect = {0,0,573,34};
+	Bonus_Loop_Message.rect = {0,0,410,34};
+	Game_Over_Message.rect = {0,0,219,31};
+	Multiball_Message.rect = { 0,0,222,32 };
+
 
 	Top_Left_Bonus_Machine.rect = { 0,0,97,109 };
 	
@@ -27,21 +32,33 @@ Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabl
 	Boy_Active.rect = { 0,0,73,78 };
 	Green_Box_Active.rect = { 0,0,64,57 };
 
+	Flipper_TopRight.rect=Flipper_TopLeft.rect = { 0,0,54,49 };
+	Flipper_MidRight.rect=Flipper_MidLeft.rect = { 0,0,37,61 };
+	Flipper_Left.rect=Flipper_Right.rect = { 0,0,71,64 };
+	Ball.rect = { 0,0,32,32 };
 
 }
 
 
 Pinball::~Pinball()
 {
+
 }
 
 bool Pinball::Start() {
+
 	LOG("Starting pinball");
+
 	Background.texture = App->textures->Load("Sprites/Background.png");
 	Top_Score_Bar.texture = App->textures->Load("Sprites/Top_Score_bar.png");
 	Black_Part_Top_Score.texture = App->textures->Load("Sprites/Black_Part_Top_Score.png");
 
+	//Messages
 	Bonus_Girl_Boy_Message.texture = App->textures->Load("Sprites/Bonus_Girl_Boy_Message.png");
+	Bonus_AllBoxes_Message.texture = App->textures->Load("Sprites/Bonus_AllBoxes_Message.png");
+	Bonus_Loop_Message.texture = App->textures->Load("Sprites/Bonus_Loop_Message.png");
+	Game_Over_Message.texture = App->textures->Load("Sprites/Game_Over_Message.png");
+	Multiball_Message.texture = App->textures->Load("Sprites/Multiball_Message.png");
 
 
 	Top_Left_Bonus_Machine.texture = App->textures->Load("Sprites/Top_Left_Bonus_Machine.png");
@@ -61,10 +78,35 @@ bool Pinball::Start() {
 
 	Initial_Tube.texture = App->textures->Load("Sprites/Initial_Tube.png");
 	KickerActive.texture = App->textures->Load("Sprites/Kicker_Active.png");
+	
+	Flipper_MidLeft.texture = App->textures->Load("Sprites/Flipper_MidLeft.png");
+	Flipper_MidRight.texture = App->textures->Load("Sprites/Flipper_MidRight.png");
+	Flipper_Left.texture=App->textures->Load("Sprites/Flipper_Left.png");
+	Flipper_Right.texture = App->textures->Load("Sprites/Flipper_Right.png");
+	Flipper_TopLeft.texture = App->textures->Load("Sprites/Flipper_TopLeft.png");
+	Flipper_TopRight.texture = App->textures->Load("Sprites/Flipper_TopRight.png");
 
 
+	Ball.texture = App->textures->Load("Sprites/Ball.png");
 
+	Flipper_MidRight.Position.x = 544;
+	Flipper_MidRight.Position.y = 672;
+	
+	Flipper_MidLeft.Position.x = 120;
+	Flipper_MidLeft.Position.y = 536;
+
+	Flipper_TopLeft.Position.x = 402;
+	Flipper_TopLeft.Position.y = 239;
+
+	Flipper_TopRight.Position.x = 506;
+	Flipper_TopRight.Position.y = 239;
+	
 	Spring.Position.y = 1022;
+	Flipper_Right.Position.x = 334;
+	Flipper_Right.Position.y = 1088;
+	Flipper_Left.Position.x = 205;
+	Flipper_Left.Position.y = 1088;
+
 
 	Velocity_Spring = 4;
 
@@ -148,6 +190,18 @@ bool Pinball::Draw() {
 	App->renderer->Blit(KickerActive.texture, 121, 616, &KickerActive.rect);
 
 
+	//Flippers
+	App->renderer->Blit(Flipper_Left.texture, Flipper_Left.Position.x, Flipper_Left.Position.y, &Flipper_Left.rect);
+	App->renderer->Blit(Flipper_Right.texture, Flipper_Right.Position.x, Flipper_Right.Position.y, &Flipper_Right.rect);
+
+	App->renderer->Blit(Flipper_MidLeft.texture, Flipper_MidLeft.Position.x, Flipper_MidLeft.Position.y, &Flipper_MidLeft.rect);
+	App->renderer->Blit(Flipper_MidRight.texture, Flipper_MidRight.Position.x, Flipper_MidRight.Position.y, &Flipper_MidRight.rect);
+
+	App->renderer->Blit(Flipper_TopLeft.texture, Flipper_TopLeft.Position.x, Flipper_TopLeft.Position.y, &Flipper_TopLeft.rect);
+	App->renderer->Blit(Flipper_TopRight.texture, Flipper_TopRight.Position.x, Flipper_TopRight.Position.y, &Flipper_TopRight.rect);
+	//Ball
+
+	App->renderer->Blit(Ball.texture, 200, 400, &Ball.rect);
 
 	//Top Score Bar
 	App->renderer->Blit(Black_Part_Top_Score.texture, 0, -App->renderer->camera.y, &Black_Part_Top_Score.rect);

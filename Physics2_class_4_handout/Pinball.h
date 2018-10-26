@@ -35,6 +35,10 @@ private :
 	Sprite Black_Part_Top_Score;
 
 	Sprite Bonus_Girl_Boy_Message;
+	Sprite Bonus_AllBoxes_Message;
+	Sprite Bonus_Loop_Message;
+	Sprite Game_Over_Message;
+	Sprite Multiball_Message;
 
 	Sprite Yellow_Active;
 	Sprite Pink_Active;
@@ -48,13 +52,19 @@ private :
 
 	Sprite Top_Left_Bonus_Machine;
 
-	
+	Sprite Ball;
 	
 	Sprite Spring;
 
 	Sprite Initial_Tube;
 	Sprite KickerActive;
-	 
+
+	Sprite Flipper_TopLeft;
+	Sprite Flipper_TopRight;
+	Sprite Flipper_MidLeft;
+	Sprite Flipper_MidRight;
+	Sprite Flipper_Left;
+	Sprite Flipper_Right;
 
 
 };
