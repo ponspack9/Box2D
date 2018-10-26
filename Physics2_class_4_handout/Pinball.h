@@ -19,6 +19,15 @@ public:
 
 	bool Draw();
 
+	void ResetBall() {
+		Ball.Position = { 583,993 };
+	}
+
+	Sprite Ball;
+
+	iPoint GetSpringPosition() const {
+		return Spring.Position;
+	};
 
 private :
 
@@ -29,6 +38,7 @@ private :
 	int Initial_Spring_Position;
 	int Velocity_Spring;
 
+	
 
 	Sprite Background;
 	Sprite Top_Score_Bar;
@@ -52,7 +62,7 @@ private :
 
 	Sprite Top_Left_Bonus_Machine;
 
-	Sprite Ball;
+	
 	
 	Sprite Spring;
 

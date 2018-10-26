@@ -101,6 +101,7 @@ bool Pinball::Start() {
 	Flipper_TopRight.Position.x = 506;
 	Flipper_TopRight.Position.y = 239;
 	
+	Spring.Position.x = 584;
 	Spring.Position.y = 1022;
 	Flipper_Right.Position.x = 334;
 	Flipper_Right.Position.y = 1088;
@@ -110,6 +111,7 @@ bool Pinball::Start() {
 
 	Velocity_Spring = 4;
 
+	ResetBall();
 	return true;
 }
 
@@ -150,8 +152,7 @@ bool Pinball::Draw() {
 	App->renderer->Blit(Background.texture, 0, 0, &Background.rect);
 	
 
-	//Spring
-	App->renderer->Blit(Spring.texture, 584, Spring.Position.y, &Spring.rect);
+	
 
 	//Box Points activated
 	App->renderer->Blit(Boy_Active.texture,54,882,&Boy_Active.rect);
@@ -168,8 +169,7 @@ bool Pinball::Draw() {
 	//Top Box Bonus
 	App->renderer->Blit(Green_Box_Active.texture, 455, 130, &Green_Box_Active.rect);
 
-	//Initial_Tube
-	App->renderer->Blit(Initial_Tube.texture, 505, 724, &Initial_Tube.rect);
+
 	
 	//kikers 
 	//9
@@ -199,9 +199,15 @@ bool Pinball::Draw() {
 
 	App->renderer->Blit(Flipper_TopLeft.texture, Flipper_TopLeft.Position.x, Flipper_TopLeft.Position.y, &Flipper_TopLeft.rect);
 	App->renderer->Blit(Flipper_TopRight.texture, Flipper_TopRight.Position.x, Flipper_TopRight.Position.y, &Flipper_TopRight.rect);
+	
 	//Ball
+	App->renderer->Blit(Ball.texture, Ball.Position.x, Ball.Position.y, &Ball.rect);
 
-	App->renderer->Blit(Ball.texture, 200, 400, &Ball.rect);
+	//Spring
+	App->renderer->Blit(Spring.texture,Spring.Position.x, Spring.Position.y, &Spring.rect);
+
+	//Initial_Tube
+	App->renderer->Blit(Initial_Tube.texture, 505, 724, &Initial_Tube.rect);
 
 	//Top Score Bar
 	App->renderer->Blit(Black_Part_Top_Score.texture, 0, -App->renderer->camera.y, &Black_Part_Top_Score.rect);

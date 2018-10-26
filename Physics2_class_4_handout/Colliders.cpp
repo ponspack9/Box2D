@@ -19,30 +19,55 @@ Colliders::~Colliders()
 
 bool Colliders::Start()
 {
-	int Initial_Tube[46] = {
-		610, 1173,
-		608, 857,
-		590, 806,
-		560, 767,
-		543, 755,
-		548, 739,
-		583, 760,
-		620, 827,
-		626, 869,
-		628, 1183,
-		397, 1183,
-		423, 1156,
-		563, 1080,
-		565, 867,
-		551, 828,
-		525, 795,
-		533, 781,
-		554, 802,
-		570, 831,
-		578, 860,
-		580, 881,
-		580, 1177,
-		610, 1179
+	int Initial_Tube[96] = {
+		78, 505,
+		77, 448,
+		78, 146,
+		77, 133,
+		75, 122,
+		71, 110,
+		66, 99,
+		60, 88,
+		54, 80,
+		45, 70,
+		37, 62,
+		29, 56,
+		8, 42,
+		-1, 62,
+		0, 67,
+		18, 76,
+		27, 83,
+		44, 104,
+		56, 134,
+		58, 183,
+		57, 534,
+		123, 535,
+		122, 147,
+		122, 133,
+		114, 76,
+		79, 27,
+		49, 10,
+		42, 3,
+		28, 0,
+		24, 3,
+		20, 14,
+		37, 25,
+		45, 32,
+		56, 41,
+		62, 47,
+		69, 55,
+		76, 64,
+		83, 74,
+		91, 87,
+		96, 98,
+		100, 110,
+		103, 122,
+		105, 133,
+		106, 148,
+		107, 203,
+		107, 450,
+		106, 514,
+		78, 514
 	};
 	int Background[147] = {
 		640, 767,
@@ -274,7 +299,7 @@ bool Colliders::Start()
 	};
 
 
-	App->physics->CreateChain(0, 0, Initial_Tube, 46);
+	App->physics->CreateChain(505, 724, Initial_Tube, 96);
 	App->physics->CreateChain(0, 0, Background, 147);
 	App->physics->CreateChain(0, 0, UpLeftCurve, 82);
 	App->physics->CreateChain(0, 0, RightDown, 12);
@@ -283,13 +308,16 @@ bool Colliders::Start()
 	App->physics->CreateChain(0, 0, LeftBottom, 14);
 
 
-	App->physics->CreateChain(205,1088,Flipper_Left, 22,b2_dynamicBody);
+	App->physics->CreateChain(205,1088,Flipper_Left, 22);
 	App->physics->CreateChain(334, 1088, Flipper_Right, 22);
 	App->physics->CreateChain(120, 536, Flipper_MidLeft, 22);
 	App->physics->CreateChain(544, 672, Flipper_MidRight, 22);
 
 	App->physics->CreateChain(402,239, Flipper_TopLeft, 20);
 	App->physics->CreateChain(506, 239, Flipper_TopRight, 22);
+
+
+	Spring=App->physics->CreateRectangle(App->pinball->GetSpringPosition().x+13, App->pinball->GetSpringPosition().y+16,27, 30,b2_kinematicBody);
 
 	App->physics->CreateCircle(372, 569, 40, b2_staticBody);
 	App->physics->CreateCircle(535, 427, 40, b2_staticBody);
