@@ -16,6 +16,7 @@ public:
 public:
 	PhysBody* Spring;
 	b2RevoluteJoint* flipper_joint;
+	float flipper_speed = 3.0f * b2_pi; //2PI radians/s
 
 
 };
