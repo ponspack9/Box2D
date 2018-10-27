@@ -109,7 +109,7 @@ bool Pinball::Start() {
 	Flipper_Left.Position.y = 1088;
 
 
-	Velocity_Spring = 4;
+	Velocity_Spring = 0;
 
 	ResetBall();
 	return true;
@@ -119,11 +119,14 @@ update_status Pinball::Update()
 {
 	//Spring Llogic
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
-		
+		Spring_Activated = true;
 		if (Spring.Position.y <= 1140) {
-			Spring_Activated = true;
-			Spring.Position.y += 3;
 			Velocity_Spring = 4;
+			Spring.Position.y += Velocity_Spring;
+			Spring_Stop = false;
+		}
+		else {
+			Velocity_Spring = 0;
 		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
@@ -132,12 +135,15 @@ update_status Pinball::Update()
 	}
 	 if (!Spring_Activated){
 		if (Spring.Position.y >= 1022) {
-			Spring.Position.y -= Velocity_Spring;
-			Velocity_Spring += 2;
+			Velocity_Spring = -15;
+			Spring.Position.y += Velocity_Spring;
 		}
 		if (Spring.Position.y < 1022) {
 			Spring.Position.y = 1022;
+			Velocity_Spring = 0;
+			Spring_Stop = true;
 		}
+		
 	}
 
 

@@ -28,15 +28,18 @@ public:
 	iPoint GetSpringPosition() const {
 		return Spring.Position;
 	};
+	int Velocity_Spring;
+	bool Spring_Activated = false;
+	bool Spring_Stop = true;
 
 private :
 
 	bool StartState = true;
-	bool Spring_Activated = false;
+
 
 	int Spring_Position;
 	int Initial_Spring_Position;
-	int Velocity_Spring;
+
 
 	
 

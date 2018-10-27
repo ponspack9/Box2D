@@ -12,7 +12,7 @@ public:
 	update_status Update();
 public:
 	PhysBody* Spring;
-	b2Body* A;
+
 
 };
 

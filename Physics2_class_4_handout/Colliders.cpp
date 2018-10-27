@@ -319,6 +319,7 @@ bool Colliders::Start()
 
 	Spring=App->physics->CreateRectangle(App->pinball->GetSpringPosition().x+13, App->pinball->GetSpringPosition().y+16,27, 30,b2_kinematicBody);
 
+	
 	App->physics->CreateCircle(372, 569, 40, b2_staticBody);
 	App->physics->CreateCircle(535, 427, 40, b2_staticBody);
 	App->physics->CreateCircle(590, 280, 15, b2_staticBody);
@@ -334,6 +335,14 @@ bool Colliders::Start()
 update_status Colliders::Update() {
 	int x = App->input->GetMouseX();
 	int y = App->input->GetMouseY();
+
+	Spring->body->SetLinearVelocity(b2Vec2(0, App->pinball->Velocity_Spring));
+
+	//correcting Movement
+	if (METERS_TO_PIXELS(Spring->body->GetPosition().y) >= 1037 && App->pinball->Spring_Stop == true) {
+		Spring->body->SetLinearVelocity(b2Vec2(0,-2));
+	}
+	LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
 	LOG("Mouse [%d,%d]", x, y);
 	return UPDATE_CONTINUE;
 }
