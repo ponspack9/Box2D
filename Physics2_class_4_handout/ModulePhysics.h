@@ -46,10 +46,12 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType type = b2_dynamicBody);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size,b2BodyType type=b2_staticBody);
+	b2RevoluteJoint * CreateRevoluteJoint(int x, int y, float angle = 35.0f,float lowerAngle=0, float upperAngle = 40, b2Body * bodyA = nullptr, b2Body*bodyB = nullptr);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 	b2World* world;
+	float flipper_speed = 3.0f * b2_pi;
 
 private:
 

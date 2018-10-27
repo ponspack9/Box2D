@@ -184,6 +184,55 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size,b2BodyT
 
 	return pbody;
 }
+/*	int x , position in pixels
+	int y , position in pixels
+	float angle, angle of the rectangle 
+*/
+b2RevoluteJoint* ModulePhysics::CreateRevoluteJoint(int x, int y, float angle, float lowerAngle, float upperAngle, b2Body* bodyA,b2Body *bodyB) {
+
+	if (bodyA == nullptr) {
+		b2Body* circle_body;
+		b2BodyDef bodyDef;
+		b2FixtureDef fixtureDef;
+		b2PolygonShape boxShape;
+		b2CircleShape circleShape;
+		boxShape.SetAsBox(PIXEL_TO_METERS(40), PIXEL_TO_METERS(10));
+
+		bodyDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+		circleShape.m_radius = PIXEL_TO_METERS(10);
+		fixtureDef.shape = &circleShape;
+		bodyDef.type = b2_staticBody;
+		bodyB = world->CreateBody(&bodyDef);
+		bodyB->CreateFixture(&fixtureDef);
+
+
+		bodyDef.angle = angle * DEGTORAD;
+		bodyDef.type = b2_dynamicBody;
+		fixtureDef.density = 1;
+		fixtureDef.shape = &boxShape;
+		bodyA = world->CreateBody(&bodyDef);
+		bodyA->CreateFixture(&fixtureDef);
+
+
+		//and circle a little to the right
+		
+
+	}
+	b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = bodyA;
+	revoluteJointDef.bodyB = bodyB;
+	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(-40), PIXEL_TO_METERS(0));//the top right corner of the box
+	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));//center of the circle
+	revoluteJointDef.lowerAngle = lowerAngle * DEGTORAD;
+	revoluteJointDef.upperAngle = upperAngle * DEGTORAD;
+	revoluteJointDef.motorSpeed = flipper_speed;
+	revoluteJointDef.maxMotorTorque = 1000.0f;
+	revoluteJointDef.enableLimit = true;
+	revoluteJointDef.enableMotor = false;
+	revoluteJointDef.collideConnected = false;
+
+	return (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
+}
 
 // 
 update_status ModulePhysics::PostUpdate()
