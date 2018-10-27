@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "ModuleInput.h"
 #include "Application.h"
+#include "Pinball.h"
 
 
 
@@ -18,90 +19,130 @@ Colliders::~Colliders()
 
 bool Colliders::Start()
 {
-	int Initial_Tube[46] = {
-		610, 1173,
-		608, 857,
-		590, 806,
-		560, 767,
-		543, 755,
-		548, 739,
-		583, 760,
-		620, 827,
-		626, 869,
-		628, 1183,
-		397, 1183,
-		423, 1156,
-		563, 1080,
-		565, 867,
-		551, 828,
-		525, 795,
-		533, 781,
-		554, 802,
-		570, 831,
-		578, 860,
-		580, 881,
-		580, 1177,
-		610, 1179
+	int Initial_Tube[96] = {
+		78, 505,
+		77, 448,
+		78, 146,
+		77, 133,
+		75, 122,
+		71, 110,
+		66, 99,
+		60, 88,
+		54, 80,
+		45, 70,
+		37, 62,
+		29, 56,
+		8, 42,
+		-1, 62,
+		0, 67,
+		18, 76,
+		27, 83,
+		44, 104,
+		56, 134,
+		58, 183,
+		57, 534,
+		123, 535,
+		122, 147,
+		122, 133,
+		114, 76,
+		79, 27,
+		49, 10,
+		42, 3,
+		28, 0,
+		24, 3,
+		20, 14,
+		37, 25,
+		45, 32,
+		56, 41,
+		62, 47,
+		69, 55,
+		76, 64,
+		83, 74,
+		91, 87,
+		96, 98,
+		100, 110,
+		103, 122,
+		105, 133,
+		106, 148,
+		107, 203,
+		107, 450,
+		106, 514,
+		78, 514
 	};
-	int Background[116] = {
+	int Background[147] = {
 		640, 767,
-		558, 732,
-		583, 684,
-		567, 668,
-		611, 589,
-		603, 588,
-		602, 549,
-		609, 549,
-		611, 352,
-		605, 353,
+		559, 739,
+		556, 733,
+		558, 727,
+		581, 686,
+		566, 676,
+		564, 672,
+		565, 667,
+		606, 592,
+		602, 590,
+		601, 549,
+		612, 549,
+		611, 358,
+		603, 357,
 		603, 314,
 		611, 313,
-		609, 83,
-		602, 86,
-		590, 74,
-		583, 80,
-		555, 56,
-		558, 47,
-		550, 40,
+		611, 81,
+		605, 88,
+		592, 78,
+		585, 84,
+		552, 56,
+		555, 48,
+		546, 39,
 		555, 29,
-		423, 30,
-		410, 42,
-		414, 52,
-		384, 78,
+		426, 31,
+		412, 45,
+		418, 56,
+		385, 84,
 		374, 73,
 		355, 90,
-		349, 177,
-		336, 186,
-		315, 153,
-		273, 132,
+		352, 178,
+		342, 190,
+		331, 186,
+		316, 156,
+		274, 136,
 		263, 126,
 		259, 98,
 		246, 75,
 		224, 52,
 		183, 33,
-		144, 28,
-		110, 35,
-		86, 50,
+		164, 29,
+		146, 28,
+		126, 31,
+		110, 37,
+		95, 45,
+		83, 54,
 		69, 69,
 		55, 95,
-		49, 121,
-		48, 155,
+		50, 122,
+		50, 157,
 		50, 653,
-		55, 676,
-		63, 695,
+		55, 679,
+		62, 694,
 		74, 709,
-		82, 723,
+		82, 722,
 		82, 742,
 		82, 833,
 		75, 836,
-		67, 828,
-		43, 831,
-		39, 1076,
-		190, 1157,
-		205, 1172,
-		205, 1179,
-		645, 1181,
-		643, 795
+		61, 833,
+		42, 834,
+		41, 1079,
+		48, 1078,
+		58, 1083,
+		194, 1157,
+		211, 1173,
+		205, 1361,
+		380, 1357,
+		400, 1173,
+		421, 1155,
+		562, 1078,
+		563, 1176,
+		633, 1173,
+		640, 773
 	};
 	int UpLeftCurve[82] = {
 		213, 131,
@@ -179,16 +220,106 @@ bool Colliders::Start()
 		208, 1082,
 		97, 1016
 	};
+	int Flipper_Left[22] = {
+		14, 0,
+		24, 1,
+		71, 47,
+		71, 58,
+		66, 63,
+		58, 63,
+		5, 34,
+		0, 26,
+		0, 15,
+		3, 5,
+		10, 0
+	};
+	int Flipper_Right[22] = {
+		55, -1,
+		47, 0,
+		0, 45,
+		0, 56,
+		4, 62,
+		9, 63,
+		64, 33,
+		70, 23,
+		70, 11,
+		64, 3,
+		57, -1
+	};
+	int Flipper_MidLeft[22] = {
+		0, 7,
+		7, 0,
+		16, 0,
+		21, 2,
+		25, 6,
+		37, 48,
+		37, 54,
+		32, 61,
+		24, 61,
+		0, 20,
+		0, 9
+	};
+	int Flipper_MidRight[22] = {
+		29, 1,
+		37, 9,
+		38, 18,
+		15, 58,
+		11, 61,
+		4, 60,
+		0, 56,
+		0, 47,
+		11, 7,
+		18, 0,
+		26, 0
+	};
+	int Flipper_TopLeft[20] = {
+		0, 6,
+		6, 0,
+		16, 0,
+		54, 36,
+		54, 46,
+		48, 49,
+		42, 47,
+		5, 26,
+		0, 19,
+		0, 9
+	};
+	int Flipper_TopRight[22] = {
+		52, 5,
+		53, 10,
+		53, 19,
+		50, 25,
+		8, 49,
+		4, 49,
+		0, 44,
+		0, 36,
+		36, 1,
+		43, -1,
+		49, 2
+	};
 
 
-	App->physics->CreateChain(0, 0, Initial_Tube, 46);
-	App->physics->CreateChain(0, 0, Background, 116);
+	App->physics->CreateChain(505, 724, Initial_Tube, 96);
+	App->physics->CreateChain(0, 0, Background, 147);
 	App->physics->CreateChain(0, 0, UpLeftCurve, 82);
 	App->physics->CreateChain(0, 0, RightDown, 12);
 	App->physics->CreateChain(0, 0, LeftDown, 10);
 	App->physics->CreateChain(0, 0, RightBottom, 14);
 	App->physics->CreateChain(0, 0, LeftBottom, 14);
 
+
+	App->physics->CreateChain(205,1088,Flipper_Left, 22);
+	App->physics->CreateChain(334, 1088, Flipper_Right, 22);
+	App->physics->CreateChain(120, 536, Flipper_MidLeft, 22);
+	App->physics->CreateChain(544, 672, Flipper_MidRight, 22);
+
+	App->physics->CreateChain(402,239, Flipper_TopLeft, 20);
+	App->physics->CreateChain(506, 239, Flipper_TopRight, 22);
+
+
+	Spring=App->physics->CreateRectangle(App->pinball->GetSpringPosition().x+13, App->pinball->GetSpringPosition().y+16,27, 30,b2_kinematicBody);
+
+	
 	App->physics->CreateCircle(372, 569, 40, b2_staticBody);
 	App->physics->CreateCircle(535, 427, 40, b2_staticBody);
 	App->physics->CreateCircle(590, 280, 15, b2_staticBody);
@@ -204,6 +335,14 @@ bool Colliders::Start()
 update_status Colliders::Update() {
 	int x = App->input->GetMouseX();
 	int y = App->input->GetMouseY();
+
+	Spring->body->SetLinearVelocity(b2Vec2(0, App->pinball->Velocity_Spring));
+
+	//correcting Movement
+	if (METERS_TO_PIXELS(Spring->body->GetPosition().y) >= 1037 && App->pinball->Spring_Stop == true) {
+		Spring->body->SetLinearVelocity(b2Vec2(0,-2));
+	}
+	LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
 	LOG("Mouse [%d,%d]", x, y);
 	return UPDATE_CONTINUE;
 }

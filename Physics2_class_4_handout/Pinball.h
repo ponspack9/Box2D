@@ -19,22 +19,39 @@ public:
 
 	bool Draw();
 
+	void ResetBall() {
+		Ball.Position = { 583,993 };
+	}
+
+	Sprite Ball;
+
+	iPoint GetSpringPosition() const {
+		return Spring.Position;
+	};
+	int Velocity_Spring;
+	bool Spring_Activated = false;
+	bool Spring_Stop = true;
 
 private :
 
 	bool StartState = true;
-	bool Spring_Activated = false;
+
 
 	int Spring_Position;
 	int Initial_Spring_Position;
-	int Velocity_Spring;
 
+
+	
 
 	Sprite Background;
 	Sprite Top_Score_Bar;
 	Sprite Black_Part_Top_Score;
 
 	Sprite Bonus_Girl_Boy_Message;
+	Sprite Bonus_AllBoxes_Message;
+	Sprite Bonus_Loop_Message;
+	Sprite Game_Over_Message;
+	Sprite Multiball_Message;
 
 	Sprite Yellow_Active;
 	Sprite Pink_Active;
@@ -54,7 +71,13 @@ private :
 
 	Sprite Initial_Tube;
 	Sprite KickerActive;
-	 
+
+	Sprite Flipper_TopLeft;
+	Sprite Flipper_TopRight;
+	Sprite Flipper_MidLeft;
+	Sprite Flipper_MidRight;
+	Sprite Flipper_Left;
+	Sprite Flipper_Right;
 
 
 };

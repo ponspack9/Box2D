@@ -10,6 +10,8 @@ public:
 	bool Start();
 
 	update_status Update();
+public:
+	PhysBody* Spring;
 
 
 };

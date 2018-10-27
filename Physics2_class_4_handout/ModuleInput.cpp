@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
-
+#include "ModuleRender.h"
 #include "SDL\include\SDL.h"
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -59,8 +59,8 @@ update_status ModuleInput::PreUpdate()
 	}
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
-	mouse_x /= SCREEN_SIZE;
-	mouse_y /= SCREEN_SIZE;
+	mouse_x;
+	mouse_y += (-App->renderer->camera.y);
 
 	for(int i = 0; i < MAX_MOUSE_BUTTONS; ++i)
 	{
