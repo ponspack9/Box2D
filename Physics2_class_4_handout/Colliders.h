@@ -1,5 +1,8 @@
 #pragma once
 #include "Module.h"
+#include "ModulePhysics.h"
+
+
 class Colliders :	public Module
 {
 public:
@@ -12,6 +15,7 @@ public:
 	update_status Update();
 public:
 	PhysBody* Spring;
+	b2RevoluteJoint* flipper_joint;
 
 
 };

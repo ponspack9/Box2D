@@ -1,6 +1,6 @@
 #include "Colliders.h"
-#include "ModulePhysics.h"
 #include "Globals.h"
+#include "ModuleInput.h"
 #include "ModuleInput.h"
 #include "Application.h"
 #include "Pinball.h"
@@ -317,7 +317,7 @@ bool Colliders::Start()
 	fixtureDef.density = 1;
 	boxShape.SetAsBox(PIXEL_TO_METERS(40), PIXEL_TO_METERS(20));
 
-	bodyDef.position.Set(3, 10);
+	bodyDef.position.Set(4, 10);
 	bodyDef.angle = 0.20f * b2_pi;
 	fixtureDef.shape = &boxShape;
 	m_bodyA = App->physics->world->CreateBody(&bodyDef);
@@ -329,15 +329,20 @@ bool Colliders::Start()
 	m_bodyB->CreateFixture(&fixtureDef);
 
 	b2RevoluteJointDef revoluteJointDef;
-	revoluteJointDef.bodyA = m_bodyA;
-	revoluteJointDef.bodyB = m_bodyB;
+	//revoluteJointDef.bodyA = m_bodyA;
+	//revoluteJointDef.bodyB = m_bodyB;
+	b2Vec2 v = { PIXEL_TO_METERS(-40), PIXEL_TO_METERS(0) };
+	revoluteJointDef.Initialize(m_bodyA, m_bodyB, v);
 	revoluteJointDef.collideConnected = false;
 	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(-40), PIXEL_TO_METERS(0));//the top right corner of the box
 	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(40), PIXEL_TO_METERS(0));//center of the circle
 	revoluteJointDef.lowerAngle = 0;
 	revoluteJointDef.upperAngle = 0.4f * b2_pi;
-	revoluteJointDef.enableLimit = true;
-	b2RevoluteJoint *m_joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&revoluteJointDef);
+	revoluteJointDef.enableLimit = false;
+	revoluteJointDef.motorSpeed = 50 * 360 * DEGTORAD;
+	revoluteJointDef.maxMotorTorque = 100.0f;
+	revoluteJointDef.enableMotor = false;
+	flipper_joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&revoluteJointDef);
 
 	// End revolution joint
 
@@ -371,11 +376,21 @@ update_status Colliders::Update() {
 
 	Spring->body->SetLinearVelocity(b2Vec2(0, App->pinball->Velocity_Spring));
 
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+	{
+		//flipper_joint->
+		//flipper_joint->SetMotorSpeed (2.0f);
+		LOG("A");
+	}
+
+	if (flipper_joint->GetJointAngle() >= 0.4f * b2_pi) {
+		LOG("TOPEEE");
+	}
 	//correcting Movement
 	if (METERS_TO_PIXELS(Spring->body->GetPosition().y) >= 1037 && App->pinball->Spring_Stop == true) {
 		Spring->body->SetLinearVelocity(b2Vec2(0, -2));
 	}
-	LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
-	LOG("Mouse [%d,%d]", x, y);
+	//LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
+	//LOG("Mouse [%d,%d]", x, y);
 	return UPDATE_CONTINUE;
 }
