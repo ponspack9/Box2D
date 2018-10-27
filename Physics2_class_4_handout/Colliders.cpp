@@ -9,7 +9,7 @@
 
 Colliders::Colliders(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	
+
 }
 
 
@@ -298,7 +298,6 @@ bool Colliders::Start()
 		49, 2
 	};
 
-
 	App->physics->CreateChain(505, 724, Initial_Tube, 96);
 	App->physics->CreateChain(0, 0, Background, 147);
 	App->physics->CreateChain(0, 0, UpLeftCurve, 82);
@@ -307,25 +306,59 @@ bool Colliders::Start()
 	App->physics->CreateChain(0, 0, RightBottom, 14);
 	App->physics->CreateChain(0, 0, LeftBottom, 14);
 
+	//Begin revolution joint
+	b2Body* m_bodyA;
+	b2Body* m_bodyB;
+	b2BodyDef bodyDef;
+	b2FixtureDef fixtureDef;
+	b2PolygonShape boxShape;
 
-	App->physics->CreateChain(205,1088,Flipper_Left, 22);
-	App->physics->CreateChain(334, 1088, Flipper_Right, 22);
-	App->physics->CreateChain(120, 536, Flipper_MidLeft, 22);
-	App->physics->CreateChain(544, 672, Flipper_MidRight, 22);
+	bodyDef.type = b2_dynamicBody;
+	fixtureDef.density = 1;
+	boxShape.SetAsBox(PIXEL_TO_METERS(40), PIXEL_TO_METERS(20));
+
+	bodyDef.position.Set(3, 10);
+	bodyDef.angle = 0.20f * b2_pi;
+	fixtureDef.shape = &boxShape;
+	m_bodyA = App->physics->world->CreateBody(&bodyDef);
+	m_bodyA->CreateFixture(&fixtureDef);
+
+	//and circle a little to the right
+	bodyDef.type = b2_staticBody;
+	m_bodyB = App->physics->world->CreateBody(&bodyDef);
+	m_bodyB->CreateFixture(&fixtureDef);
+
+	b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = m_bodyA;
+	revoluteJointDef.bodyB = m_bodyB;
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(-40), PIXEL_TO_METERS(0));//the top right corner of the box
+	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(40), PIXEL_TO_METERS(0));//center of the circle
+	revoluteJointDef.lowerAngle = 0;
+	revoluteJointDef.upperAngle = 0.4f * b2_pi;
+	revoluteJointDef.enableLimit = true;
+	b2RevoluteJoint *m_joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&revoluteJointDef);
+
+	// End revolution joint
+
+
+	PhysBody* f_left		= App->physics->CreateChain(205, 1088,Flipper_Left, 22);
+	PhysBody* f_right		= App->physics->CreateChain(334, 1088,Flipper_Right, 22);
+	PhysBody* f_MidLeft		= App->physics->CreateChain(120, 536, Flipper_MidLeft, 22);
+	PhysBody* f_MideRight	= App->physics->CreateChain(544, 672, Flipper_MidRight, 22);
+
+
+	Spring = App->physics->CreateRectangle(App->pinball->GetSpringPosition().x + 13, App->pinball->GetSpringPosition().y + 16, 27, 30, b2_kinematicBody);
 
 	App->physics->CreateChain(402,239, Flipper_TopLeft, 20);
 	App->physics->CreateChain(506, 239, Flipper_TopRight, 22);
 
-
-	Spring=App->physics->CreateRectangle(App->pinball->GetSpringPosition().x+13, App->pinball->GetSpringPosition().y+16,27, 30,b2_kinematicBody);
-
-	
 	App->physics->CreateCircle(372, 569, 40, b2_staticBody);
 	App->physics->CreateCircle(535, 427, 40, b2_staticBody);
 	App->physics->CreateCircle(590, 280, 15, b2_staticBody);
 	App->physics->CreateCircle(550, 161, 15, b2_staticBody);
 	App->physics->CreateCircle(398, 161, 15, b2_staticBody);
-	App->physics->CreateCircle(305, 165,  15, b2_staticBody);
+	App->physics->CreateCircle(305, 165, 15, b2_staticBody);
 	App->physics->CreateCircle(544, 866, 15, b2_staticBody);
 	App->physics->CreateCircle(150, 340, 15, b2_staticBody);
 
@@ -340,7 +373,7 @@ update_status Colliders::Update() {
 
 	//correcting Movement
 	if (METERS_TO_PIXELS(Spring->body->GetPosition().y) >= 1037 && App->pinball->Spring_Stop == true) {
-		Spring->body->SetLinearVelocity(b2Vec2(0,-2));
+		Spring->body->SetLinearVelocity(b2Vec2(0, -2));
 	}
 	LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
 	LOG("Mouse [%d,%d]", x, y);
