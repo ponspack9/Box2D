@@ -304,77 +304,21 @@ bool Colliders::Start()
 	App->physics->CreateChain(0, 0, RightDown, 12);
 	App->physics->CreateChain(0, 0, LeftDown, 10);
 	App->physics->CreateChain(0, 0, RightBottom, 14);
-	//App->physics->CreateChain(0, 0, LeftBottom, 14);
+	App->physics->CreateChain(0, 0, LeftBottom, 14);
 	
-	//Begin revolution joint
-	//b2Body* m_bodyA;
-	//b2Body* m_bodyB;
-	//b2BodyDef bodyDef;
-	//b2FixtureDef fixtureDef;
-	//b2PolygonShape boxShape;
-	//b2CircleShape circleShape;
-	//boxShape.SetAsBox(PIXEL_TO_METERS(40), PIXEL_TO_METERS(10));
+	//Create Flippers
 
-	//bodyDef.position.Set(PIXEL_TO_METERS(205), PIXEL_TO_METERS(1095));
-	//bodyDef.angle = 0.18f * b2_pi;
-	//bodyDef.type = b2_dynamicBody;
-	//fixtureDef.density = 1;
-	//fixtureDef.shape = &boxShape;
-	//m_bodyA = App->physics->world->CreateBody(&bodyDef);
-	//m_bodyA->CreateFixture(&fixtureDef);
+	CreateFlipper(Left_Flipper, 205, 1095, 60, 30, 20,0,-40,45);
+	CreateFlipper(Right_Flipper, 400, 1095, 60, 30, 20,170,-220,-145);
+
+	CreateFlipper(MidLeft_Flipper, 134, 550, 40, 20, 15, 0, -80, 40);
 
 
-	////and circle a little to the right
-	//circleShape.m_radius = PIXEL_TO_METERS(10);
-	//fixtureDef.shape = &circleShape;
-	////fixtureDef.shape = &boxShape;
-	//bodyDef.type = b2_staticBody;
-	////bodyDef.angle = 0.15f * b2_pi;
-	//m_bodyB = App->physics->world->CreateBody(&bodyDef);
-	//m_bodyB->CreateFixture(&fixtureDef);
-
-
-	////and circle a little to the right
-	//boxShape.SetAsBox(PIXEL_TO_METERS(40), PIXEL_TO_METERS(18));
-	////fixtureDef.shape = &boxShape;
-	//bodyDef.type = b2_staticBody;
-	//bodyDef.angle = 0.15f * b2_pi;
-	//m_bodyB = App->physics->world->CreateBody(&bodyDef);
-	//m_bodyB->CreateFixture(&fixtureDef);
-
-
-	//Attach = App->physics->CreateCircle(205,1095,20,b2_staticBody)->body;
-	//flipper = App->physics->CreateRectangle(205,1095,80,30,0.14)->body;
-
-	//b2RevoluteJointDef revoluteJointDef;
-	//revoluteJointDef.bodyA = flipper;
-	//revoluteJointDef.bodyB = Attach;
-	////b2Vec2 v = { PIXEL_TO_METERS(-40), PIXEL_TO_METERS(0) };
-	////revoluteJointDef.Initialize(m_bodyA, m_bodyB, v);
-	//revoluteJointDef.collideConnected = false;
-	//revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(-50), PIXEL_TO_METERS(4));//the top right corner of the box
-	//revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));//center of the circle
-	//revoluteJointDef.lowerAngle = -0.7f ;
-	//revoluteJointDef.upperAngle = 0.2f * b2_pi;
-	//revoluteJointDef.enableLimit = true;
-	//revoluteJointDef.motorSpeed = flipper_speed;
-	//revoluteJointDef.maxMotorTorque = 1000.0f;
-	//revoluteJointDef.enableMotor = false;
-	//flipper_joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&revoluteJointDef);
-
-
-
-	CreateFlipper(Left_Flipper, 205, 1095, 68, 30, 20,-40,45);
-	// End revolution joint
-
-
-	//PhysBody* f_left		= App->physics->CreateChain(205, 1088,Flipper_Left, 22);
-	PhysBody* f_right		= App->physics->CreateChain(334, 1088,Flipper_Right, 22);
-	PhysBody* f_MidLeft		= App->physics->CreateChain(120, 536, Flipper_MidLeft, 22);
+	//PhysBody* f_MidLeft		= App->physics->CreateChain(120, 536, Flipper_MidLeft, 22);
 	PhysBody* f_MideRight	= App->physics->CreateChain(544, 672, Flipper_MidRight, 22);
 
 
-	Spring = App->physics->CreateRectangle(App->pinball->GetSpringPosition().x + 13, App->pinball->GetSpringPosition().y + 16, 27, 30, b2_kinematicBody);
+	Spring = App->physics->CreateRectangle(App->pinball->GetSpringPosition().x + 13, App->pinball->GetSpringPosition().y + 16, 27, 30,0, b2_kinematicBody);
 
 	App->physics->CreateChain(402,239, Flipper_TopLeft, 20);
 	App->physics->CreateChain(506, 239, Flipper_TopRight, 22);
@@ -402,33 +346,48 @@ update_status Colliders::Update() {
 		//flipper_joint->
 		Left_Flipper.Flipper_joint->EnableMotor (true);
 		Left_Flipper.Flipper_joint->SetMotorSpeed (flipper_speed);
+		MidLeft_Flipper.Flipper_joint->EnableMotor(true);
+		MidLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed);
+	
 		LOG("A");
 	}
 
-	if (Left_Flipper.Flipper_joint->GetJointAngle() >= 0.2f * b2_pi) {
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		//flipper_joint->
+		Right_Flipper.Flipper_joint->EnableMotor(true);
+		Right_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
+		LOG("D");
+	}
+
+	if (Right_Flipper.Flipper_joint->GetJointAngle() <= -220*DEGTORAD) {
 		LOG("TOPEEE");
-		Left_Flipper.Flipper_joint->EnableMotor(false);
+		Right_Flipper.Flipper_joint->SetMotorSpeed(+5);
+
+	}
+	if (Left_Flipper.Flipper_joint->GetJointAngle() >= 45*DEGTORAD) {
+		LOG("TOPEEE");
+		Left_Flipper.Flipper_joint->SetMotorSpeed(-5);
+		MidLeft_Flipper.Flipper_joint->SetMotorSpeed(-5);
 
 	}
 
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		//correcting Movement
-		Spring->body->SetLinearVelocity(b2Vec2(0, App->pinball->Velocity_Spring));
-		if (METERS_TO_PIXELS(Spring->body->GetPosition().y) >= 1037 && App->pinball->Spring_Stop == true) {
-			Spring->body->SetLinearVelocity(b2Vec2(0, -2));
-		}
+	Spring->body->SetLinearVelocity(b2Vec2(0, App->pinball->Velocity_Spring));
+
+	//correcting Movement
+	if (METERS_TO_PIXELS(Spring->body->GetPosition().y) >= 1037 && App->pinball->Spring_Stop == true) {
+		Spring->body->SetLinearVelocity(b2Vec2(0, -2));
 	}
 	//LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
 	LOG("Mouse [%d,%d]", x, y);
 	return UPDATE_CONTINUE;
 }
 
-void Colliders::CreateFlipper(Flipper &flipers, int x,int y, int width,int height,int radius, int low_Angle, int max_Angle) {
+void Colliders::CreateFlipper(Flipper &flipers, int x,int y, int width,int height,int radius,int angle ,int low_Angle, int max_Angle) {
 
 	flipers.Placement = App->physics->CreateCircle(x, y, radius, b2_staticBody)->body;
-	flipers.ForceShape = App->physics->CreateRectangle(x, y, width, height, 0.14)->body;
+	flipers.ForceShape = App->physics->CreateRectangle(x, y, width, height, angle)->body;
 
 	//flipers.Placement = App->physics->CreateCircle(205, 1095, 20, b2_staticBody)->body;
 	//flipers.Flipper = App->physics->CreateRectangle(205, 1095, 80, 30, 0.14)->body;
@@ -439,7 +398,7 @@ void Colliders::CreateFlipper(Flipper &flipers, int x,int y, int width,int heigh
 	//b2Vec2 v = { PIXEL_TO_METERS(-40), PIXEL_TO_METERS(0) };
 	//revoluteJointDef.Initialize(m_bodyA, m_bodyB, v);
 	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(-50), PIXEL_TO_METERS(4));//the top right corner of the box
+	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(-width/1.3), PIXEL_TO_METERS(0));//the top right corner of the box
 	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));//center of the circle
 	revoluteJointDef.lowerAngle = low_Angle*DEGTORAD;
 	revoluteJointDef.upperAngle = max_Angle*DEGTORAD;

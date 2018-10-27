@@ -103,6 +103,7 @@ bool Pinball::Start() {
 	
 	Spring.Position.x = 584;
 	Spring.Position.y = 1022;
+
 	Flipper_Right.Position.x = 334;
 	Flipper_Right.Position.y = 1088;
 	Flipper_Left.Position.x = 205;

@@ -104,7 +104,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, fl
 	b2BodyDef body;
 	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-	body.angle = b2_pi*angle;
+	body.angle = angle*DEGTORAD;
 
 	b2Body* b = world->CreateBody(&body);
 	b2PolygonShape box;

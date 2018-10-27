@@ -27,13 +27,17 @@ public:
 	PhysBody* Spring;
 	b2RevoluteJoint* flipper_joint;
 
-	void Colliders::CreateFlipper(Flipper &flipers, int x, int y, int width, int height, int radius,int low_Angle, int max_Angle);
+	void CreateFlipper(Flipper &flipers, int x, int y, int width, int height, int radius, int angle,int low_Angle, int max_Angle);
 
 	Flipper Left_Flipper;
 	Flipper Right_Flipper;
+	Flipper MidLeft_Flipper;
+	Flipper MidRight_Flipper;
+	Flipper TopLeft_Flipper;
+	Flipper TopRight_Flipper;
 
 	float flipper_speed = 3.0f * b2_pi; //2PI radians/s
-
+	float flipper_Speed_Right = -3.0f * b2_pi; //2PI radians/s
 
 };
 
