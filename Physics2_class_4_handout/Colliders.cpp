@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleInput.h"
 #include "Application.h"
+#include "ModulePlayer.h"
 #include "Pinball.h"
 
 
@@ -49,15 +50,23 @@ bool Colliders::Start()
 	App->physics->CreateChain(0, 0, RightBottom, 14);
 	App->physics->CreateChain(0, 0, LeftBottom, 14);
 
-	App->physics->CreateCircle(372, 569, 40, b2_staticBody);
-	App->physics->CreateCircle(535, 427, 40, b2_staticBody);
-	App->physics->CreateCircle(590, 280, 15, b2_staticBody);
-	App->physics->CreateCircle(550, 161, 15, b2_staticBody);
-	App->physics->CreateCircle(398, 161, 15, b2_staticBody);
-	App->physics->CreateCircle(305, 165, 15, b2_staticBody);
-	App->physics->CreateCircle(544, 866, 15, b2_staticBody);
-	App->physics->CreateCircle(150, 340, 15, b2_staticBody);
+	circles.add(App->physics->CreateCircleSensor(372, 569, 40, this));
+	circles.add(App->physics->CreateCircleSensor(535, 427, 40, this));
+	circles.add(App->physics->CreateCircleSensor(590, 280, 15, this));
+	circles.add(App->physics->CreateCircleSensor(550, 161, 15, this));
+	circles.add(App->physics->CreateCircleSensor(398, 161, 15, this));
+	circles.add(App->physics->CreateCircleSensor(305, 165, 15, this));
+	circles.add(App->physics->CreateCircleSensor(544, 866, 15, this));
+	circles.add(App->physics->CreateCircleSensor(150, 340, 15, this));
 	
+		App->physics->CreateCircle(372, 569, 40,b2_staticBody);
+		App->physics->CreateCircle(535, 427, 40,b2_staticBody);
+		App->physics->CreateCircle(590, 280, 15,b2_staticBody);
+		App->physics->CreateCircle(550, 161, 15,b2_staticBody);
+		App->physics->CreateCircle(398, 161, 15,b2_staticBody);
+		App->physics->CreateCircle(305, 165, 15,b2_staticBody);
+		App->physics->CreateCircle(544, 866, 15,b2_staticBody);
+		App->physics->CreateCircle(150, 340, 15,b2_staticBody);
 	//Create Flippers
 
 	CreateFlipper(Left_Flipper, 205, 1095, 60, 20, 10, 0, -40, 45);
@@ -90,6 +99,7 @@ bool Colliders::Start()
 
 void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 {
+	if (last_collided == bodyA && !App->physics->have_touched) return;
 	//Spawn a ball that collides with orange bonus to trigger it
 	bool to_score = true;
 	if (bodyA == orange) {
@@ -112,18 +122,39 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 	}
 	else if (bodyA == boy) {
 		LOG("boy")
+		App->player->score += 100;
 	}
 	else if (bodyA == girl) {
 		LOG("girl")
+		App->player->score += 100;
+	}
+	else if (bodyA == green_square_mid) {
+		LOG("green_square_mid")
+	}
+	else if (bodyA == green_square_top) {
+		LOG("green_square_top")
 	}
 	else if (bodyA == ground) {
 		LOG("ground");
 		to_score = false;
 	}
+	else {
+		p2List_item<PhysBody*>* c = circles.getFirst();
+		while (c != NULL) {
+			if (bodyA == c->data) {
+				LOG("circle");
+				break;
+			}
+			c = c->next;
+		}
+	}
 	if (to_score) {
-		App->pinball->score += 100;
+		App->player->score += 100;
 
 	}
+	LOG("Score: %u", App->player->score);
+	last_collided = bodyA;
+
 }
 
 update_status Colliders::Update()
@@ -181,7 +212,7 @@ update_status Colliders::Update()
 		Spring->body->SetLinearVelocity(b2Vec2(0, -2));
 	}
 	//LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
-	LOG("Mouse [%d,%d]", x, y);
+	//LOG("Mouse [%d,%d]", x, y);
 
 	return UPDATE_CONTINUE;
 }

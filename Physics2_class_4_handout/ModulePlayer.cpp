@@ -13,6 +13,7 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
+	score = 0;
 	return true;
 }
 

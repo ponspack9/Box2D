@@ -60,11 +60,17 @@ bool ModulePhysics::Start()
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
-
+	have_touched = false;
 	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
+		if (c->IsTouching() && c->GetFixtureA()->GetShape()->GetType() == b2Shape::e_chain
+			&& c->GetFixtureB()->GetShape()->GetType() == b2Shape::e_circle && !have_touched) {
+			have_touched = true;
+			//LOG("TOUCH")
+		}
 		if(c->GetFixtureA()->IsSensor() && c->IsTouching())
 		{
+			//have_touched = true;
 			BeginContact(c);
 		}
 	}
@@ -90,6 +96,31 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type)
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
+PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, Module* callback)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+	fixture.isSensor = true;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	pbody->listener = callback;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
 

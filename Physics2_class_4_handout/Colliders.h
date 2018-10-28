@@ -1,5 +1,6 @@
 #pragma once
 #include "Module.h"
+#include "p2List.h"
 #include "ModulePhysics.h"
 
 
@@ -52,6 +53,10 @@ public:
 	PhysBody* girl;
 	PhysBody* green_square_mid;
 	PhysBody* green_square_top;
+
+	p2List<PhysBody*> circles;
+
+	PhysBody* last_collided;
 
 	PhysBody* ground;
 

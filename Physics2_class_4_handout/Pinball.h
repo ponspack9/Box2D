@@ -33,7 +33,6 @@ public:
 	bool Spring_Stop = true;
 
 	Sprite Background;
-	uint score;
 
 
 private :
