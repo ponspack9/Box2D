@@ -13,7 +13,10 @@ public:
 	Pinball(Application* app, bool start_enabled=true);
 	~Pinball();
 
+	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+
 	bool Start();
+	bool CleanUp();
 
 	void Multiball();
 
@@ -33,14 +36,24 @@ public:
 		return Spring.Position;
 	};
 
+
+	uint score;
+	int lifes;
+	int current_balls;
+
+	bool game_over;
+
 	int Angle_Right;
 	int Angle_Left;
 	int Velocity_Spring;
 	bool Spring_Activated = false;
 	bool Spring_Stop = true;
+	bool died = false;
 
 	Sprite Background;
 
+
+	PhysBody* last_collided=nullptr;
 	p2List<PhysBody*> Balls;
 	
 	uint Launcher_Down;
