@@ -53,17 +53,6 @@ Pinball::~Pinball()
 
 bool Pinball::CleanUp() {
 
-
-	/*p2List_item<SDL_Texture*>* c = App->textures->textures.getFirst();
-
-	while (c != NULL)
-	{
-		if (c->data != nullptr) {
-			App->textures->Unload(c->data);
-			c = c->next;
-		}
-	}*/
-
 	App->textures->Unload(Background.texture);
 	App->textures->Unload(Top_Score_Bar.texture);
 	App->textures->Unload(Black_Part_Top_Score.texture);
@@ -148,7 +137,7 @@ bool Pinball::Start() {
 	Flipper_TopRight.texture = App->textures->Load("Sprites/Flipper_TopRight.png");
 	Ball.texture = App->textures->Load("Sprites/Ball.png");
 
-
+	Bonus_Girl_Boy_Message.Position.x = 490;
 	Bonus_AllBoxes_Message.Position.x = 490;
 
 	Flipper_MidRight.Position.x = 544;
@@ -194,6 +183,9 @@ bool Pinball::Start() {
 	 right_activated = false;
 	 bonusAllBoxes = false;
 	 allBoxesPass = false;
+	 sumedPoints = false;
+	 BonusMeowMeow = false;
+
 
 	AddBall(Ball.Position.x, Ball.Position.y);
 	//Balls.add(App->physics->CreateCircle(Ball.Position.x, Ball.Position.y, 12));
@@ -241,6 +233,18 @@ update_status Pinball::Update()
 
 	if (bonusAllBoxes&&!allBoxesPass) {
 		Bonus_AllBoxes_Message.Position.x-=3;
+	}
+	if (bonusAllBoxes && Boy_Activated && Girl_Activated) {
+		BonusMeowMeow = true;
+	}
+
+	if (BonusMeowMeow && !sumedPoints) {
+		score += 20000;
+		sumedPoints2 = true;
+	}
+
+	if (BonusMeowMeow) {
+		Bonus_Girl_Boy_Message.Position.x -= 3;
 	}
 
 	if (App->colliders->spawn_multiball && App->player->current_balls <= 4) Multiball();
@@ -291,6 +295,12 @@ update_status Pinball::Update()
 		 App->renderer->Blit(Ball.texture, x, y, NULL, 1.0f);
 
 		 App->renderer->camera.y = -y + 300;
+		 if (App->renderer->camera.y <= -670) {
+			 App->renderer->camera.y= -669;
+		 }
+		 else if (App->renderer->camera.y >= 10) {
+			 App->renderer->camera.y = 10;
+		 }
 		
 		 c = c->next;
 	 }
@@ -408,7 +418,7 @@ bool Pinball::Draw() {
 	//Top Score Bar
 	App->renderer->Blit(Black_Part_Top_Score.texture, 0, -App->renderer->camera.y, &Black_Part_Top_Score.rect);
 	App->renderer->Blit(Bonus_AllBoxes_Message.texture, Bonus_AllBoxes_Message.Position.x, (-App->renderer->camera.y) + 9, &Bonus_Girl_Boy_Message.rect);
-	//App->renderer->Blit(Bonus_Girl_Boy_Message.texture, 0, (-App->renderer->camera.y)+9, &Bonus_Girl_Boy_Message.rect);
+	App->renderer->Blit(Bonus_Girl_Boy_Message.texture, Bonus_Girl_Boy_Message.Position.x, (-App->renderer->camera.y)+9, &Bonus_Girl_Boy_Message.rect);
 	App->renderer->Blit(Top_Score_Bar.texture, 0, -App->renderer->camera.y, &Top_Score_Bar.rect);
 	
 	//Printing score

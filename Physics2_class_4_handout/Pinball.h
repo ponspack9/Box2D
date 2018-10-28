@@ -75,6 +75,10 @@ public:
 	bool bonusAllBoxes;
 		bool allBoxesPass;
 		bool sumedPoints;
+	bool BonusMeowMeow;
+		bool sumedPoints2;
+
+
 	int font_score;
 	char score_text[10];
 
