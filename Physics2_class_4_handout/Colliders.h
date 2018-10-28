@@ -27,9 +27,12 @@ public:
 	uint Flipper_FX;
 
 	PhysBody* Spring;
-	b2RevoluteJoint* flipper_joint;
+	b2RevoluteJoint* flipper_joint; 
 
 	void CreateFlipper(Flipper &flipers, int x, int y, int width, int height, int radius, int angle,int low_Angle, int max_Angle);
+
+	bool Right_flippers_Active;
+	bool Left_flippers_Active;
 
 	Flipper Left_Flipper;
 	Flipper Right_Flipper;

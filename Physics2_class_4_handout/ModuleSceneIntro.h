@@ -3,8 +3,10 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "ModuleTextures.h"
 
 class PhysBody;
+struct Sprite;
 
 class ModuleSceneIntro : public Module
 {
@@ -21,6 +23,9 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
+
+	Sprite Background;
+	Sprite Play;
 
 	SDL_Texture* circle;
 	SDL_Texture* box;

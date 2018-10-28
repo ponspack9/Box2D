@@ -107,7 +107,7 @@ bool Colliders::Start()
 	CreateFlipper(MidRight_Flipper, 570, 670, 45, 15, 10, 170, -190, -115);
 
 	CreateFlipper(TopLeft_Flipper, 400, 240, 50, 15, 10, 0, -40, 45);
-	CreateFlipper(TopRight_Flipper, 565, 240, 50, 15, 10, 170, -220, -145);
+	CreateFlipper(TopRight_Flipper, 565, 240, 50, 15, 10, 170, -230, -145);
 
 	//Spring
 
@@ -214,6 +214,7 @@ update_status Colliders::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
+		Left_flippers_Active = true;
 		Left_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed);
 		TopLeft_Flipper.Flipper_joint->SetMotorSpeed (flipper_speed);
 		MidLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed);
@@ -221,9 +222,10 @@ update_status Colliders::Update()
 	
 		LOG("A");
 	}
-
+	
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
+		Right_flippers_Active = true;
 		Right_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
 		TopRight_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
 		MidRight_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
@@ -236,19 +238,21 @@ update_status Colliders::Update()
 		Left_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back);
 		TopLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back);
 		MidLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back);
-
+		Left_flippers_Active = false;
 		LOG("TOPEEE Left");
 	}
 
 	if (Right_Flipper.Flipper_joint->GetJointAngle() <= Right_Flipper.Flipper_joint->GetLowerLimit()) 
 	{
+	
 		Right_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
 		TopRight_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
 		//MidRight_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
+		Right_flippers_Active = false;
 
 		LOG("TOPEEEE Right");
 	}
-	// Can't get it work in the same if,, to check, AND some kind of delay 
+	 //Can't get it work in the same if,, to check, AND some kind of delay 
 	if (MidRight_Flipper.Flipper_joint->GetJointAngle() <= MidRight_Flipper.Flipper_joint->GetLowerLimit()) {
 		MidRight_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
 
@@ -262,8 +266,8 @@ update_status Colliders::Update()
 	if (METERS_TO_PIXELS(Spring->body->GetPosition().y) >= 1037 && App->pinball->Spring_Stop == true) {
 		Spring->body->SetLinearVelocity(b2Vec2(0, -2));
 	}
-	//LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
-	//LOG("Mouse [%d,%d]", x, y);
+	LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
+	LOG("Mouse [%d,%d]", x, y);
 
 	return UPDATE_CONTINUE;
 }
