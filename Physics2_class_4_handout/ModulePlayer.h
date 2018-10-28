@@ -19,4 +19,9 @@ public:
 public:
 
 	uint score;
+	uint lifes;
+	int current_balls;
+
+	bool game_over;
+
 };

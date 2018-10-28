@@ -153,10 +153,11 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, fl
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, Module* callback)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, float angle ,Module* callback)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
+	body.angle = angle * DEGTORAD;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);

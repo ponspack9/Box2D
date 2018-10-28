@@ -14,8 +14,11 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 	score = 0;
+	current_balls = 0;
+	lifes = 3;
 	return true;
 }
+
 
 // Unload assets
 bool ModulePlayer::CleanUp()

@@ -45,7 +45,7 @@ public:
 
 	PhysBody* CreateCircle(int x, int y, int radius,b2BodyType type = b2_dynamicBody);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, float angle = 0, b2BodyType type = b2_dynamicBody);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, Module* callback = nullptr);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float angle = 0,Module* callback = nullptr);
 	PhysBody* CreateCircleSensor(int x, int y, int radius,Module* callback = nullptr);
 	PhysBody* CreateChain(int x, int y, int* points, int size,b2BodyType type=b2_staticBody);
 	
