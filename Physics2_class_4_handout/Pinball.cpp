@@ -7,6 +7,7 @@
 #include "ModuleInput.h"
 #include "ModuleFadeToBlack.h"
 #include "ModulePhysics.h"
+#include "ModuleAudio.h"
 
 
 Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabled){
@@ -48,6 +49,22 @@ Pinball::~Pinball()
 bool Pinball::Start() {
 
 	LOG("Starting pinball");
+
+
+	Yellow_Activated = false;
+	 Pink_Activated = false;
+	 Red_Activated = false;
+	Blue_Activated = false;
+	Green_Activated = false;
+	Orange_Activated = false;
+	Girl_Activated = false;
+	Boy_Activated = false;
+	Green_Box1_Activated = false;
+	Green_Box2_Activated = false;
+
+	//Music
+	Launcher_Down = App->audio->LoadFx("Audio/Launcher_Charge.wav");
+
 
 	Background.texture = App->textures->Load("Sprites/Background.png");
 	Top_Score_Bar.texture = App->textures->Load("Sprites/Top_Score_bar.png");
@@ -111,15 +128,22 @@ bool Pinball::Start() {
 
 	score = 0;
 	Velocity_Spring = 0;
-
+	//App->audio->PlayMusic("Audio/InGame_Music.wav", 0.0f);
 	ResetBall();
+
+	Balls.add(App->physics->CreateCircle(Ball.Position.x, Ball.Position.y, 12));
+	Balls.getLast()->data->listener = this;
+
 	return true;
 }
 
 update_status Pinball::Update()
 {
+	
+	
 	//Spring Llogic
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+		App->audio->PlayFx(Launcher_Down);
 		Spring_Activated = true;
 		if (Spring.Position.y <= 1140) {
 			Velocity_Spring = 4;
@@ -147,9 +171,39 @@ update_status Pinball::Update()
 		
 	}
 
+	 iPoint mouse;
+	 mouse.x = App->input->GetMouseX();
+	 mouse.y = App->input->GetMouseY();
 
-	Draw();
+	 Draw();
+
+	 // All draw functions ------------------------------------------------------
+	 p2List_item<PhysBody*>* c = Balls.getFirst();
+
+	 while (c != NULL)
+	 {
+		 int x, y;
+		 c->data->GetPosition(x, y);
+		 App->renderer->Blit(Ball.texture, x, y, NULL, 1.0f);
+		 c = c->next;
+	 }
+
+
+	
 	return UPDATE_CONTINUE;
+}
+
+void Pinball::flicker(bool tochange) {
+
+	for (int i = 0; i < 50; i++) {
+		if (i % 2 == 0) {
+			tochange = false;
+		}
+		else {
+			tochange = true;
+		}
+	}
+	tochange = true;
 }
 
 bool Pinball::Draw() {
@@ -162,19 +216,29 @@ bool Pinball::Draw() {
 	
 
 	//Box Points activated
-	App->renderer->Blit(Boy_Active.texture,54,882,&Boy_Active.rect);
-	App->renderer->Blit(Girl_Active.texture, 486,881, &Girl_Active.rect);
-	App->renderer->Blit(Yellow_Active.texture, 143, 693, &Yellow_Active.rect);
-	App->renderer->Blit(Red_Active.texture, 426, 699, &Red_Active.rect);
-	App->renderer->Blit(Pink_Active.texture, 281, 664, &Pink_Active.rect);
-	App->renderer->Blit(Orange_Active.texture, 272, 1004, &Orange_Active.rect);
-	App->renderer->Blit(Green_Active.texture, 338, 879, &Green_Active.rect);
-	App->renderer->Blit(Blue_Active.texture, 204, 881, &Blue_Active.rect);
+	if(Boy_Activated)
+		App->renderer->Blit(Boy_Active.texture,54,882,&Boy_Active.rect);
+	if (Girl_Activated)
+		App->renderer->Blit(Girl_Active.texture, 486,881, &Girl_Active.rect);
+	if (Yellow_Activated)
+		App->renderer->Blit(Yellow_Active.texture, 143, 693, &Yellow_Active.rect);
+	if (Red_Activated)
+		App->renderer->Blit(Red_Active.texture, 426, 699, &Red_Active.rect);
+	if (Pink_Activated)
+		App->renderer->Blit(Pink_Active.texture, 281, 664, &Pink_Active.rect);
+	if (Orange_Activated)
+		App->renderer->Blit(Orange_Active.texture, 272, 1004, &Orange_Active.rect);
+	if (Green_Activated)
+		App->renderer->Blit(Green_Active.texture, 338, 879, &Green_Active.rect);
+	if (Blue_Activated)
+		App->renderer->Blit(Blue_Active.texture, 204, 881, &Blue_Active.rect);
 
 	//Middle Box Bonus
-	App->renderer->Blit(Green_Box_Active.texture, 312, 342, &Green_Box_Active.rect);
+	if (Green_Box1_Activated)
+		App->renderer->Blit(Green_Box_Active.texture, 312, 342, &Green_Box_Active.rect);
 	//Top Box Bonus
-	App->renderer->Blit(Green_Box_Active.texture, 455, 130, &Green_Box_Active.rect);
+	if (Green_Box2_Activated)
+		App->renderer->Blit(Green_Box_Active.texture, 455, 130, &Green_Box_Active.rect);
 
 
 	
@@ -206,9 +270,7 @@ bool Pinball::Draw() {
 
 	App->renderer->Blit(Flipper_TopLeft.texture, Flipper_TopLeft.Position.x, Flipper_TopLeft.Position.y, &Flipper_TopLeft.rect);
 	App->renderer->Blit(Flipper_TopRight.texture, Flipper_TopRight.Position.x, Flipper_TopRight.Position.y, &Flipper_TopRight.rect);
-	
-	//Ball
-	App->renderer->Blit(Ball.texture, Ball.Position.x, Ball.Position.y, &Ball.rect);
+
 
 	//Spring
 	App->renderer->Blit(Spring.texture,Spring.Position.x, Spring.Position.y, &Spring.rect);

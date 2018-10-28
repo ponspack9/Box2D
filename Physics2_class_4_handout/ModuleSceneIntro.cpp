@@ -140,7 +140,7 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
-
+	
 	/*App->pinball->Draw();*/
 
 	return UPDATE_CONTINUE;
@@ -148,5 +148,7 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	App->audio->PlayFx(bonus_fx);
+	
+	//App->audio->PlayFx(bonus_fx);
+	
 }
