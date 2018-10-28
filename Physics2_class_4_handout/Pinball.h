@@ -53,6 +53,8 @@ public:
 	bool Boy_Activated;
 	bool Green_Box1_Activated;
 	bool Green_Box2_Activated;
+	bool left_activated;
+	bool right_activated;
 
 
 private :

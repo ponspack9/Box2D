@@ -14,9 +14,12 @@ public:
 	ModuleSceneIntro(Application* app, bool start_enabled = true);
 	~ModuleSceneIntro();
 
+	void Multiball();
+
 	bool Start();
 	update_status Update();
 	bool CleanUp();
+	void AddBall(int x, int y);
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
@@ -31,4 +34,6 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	uint bonus_fx;
+
+	PhysBody* last_collided;
 };

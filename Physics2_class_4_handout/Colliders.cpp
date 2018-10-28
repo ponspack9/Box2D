@@ -1,7 +1,6 @@
 #include "Colliders.h"
 #include "Globals.h"
 #include "ModuleInput.h"
-#include "ModuleInput.h"
 #include "Application.h"
 #include "ModulePlayer.h"
 #include "Pinball.h"
@@ -90,14 +89,15 @@ bool Colliders::Start()
 	circles.add(App->physics->CreateCircleSensor(544, 866, 15, this));
 	circles.add(App->physics->CreateCircleSensor(150, 340, 15, this));
 	
-		App->physics->CreateCircle(372, 569, 40,b2_staticBody);
-		App->physics->CreateCircle(535, 427, 40,b2_staticBody);
-		App->physics->CreateCircle(590, 280, 15,b2_staticBody);
-		App->physics->CreateCircle(550, 161, 15,b2_staticBody);
-		App->physics->CreateCircle(398, 161, 15,b2_staticBody);
-		App->physics->CreateCircle(305, 165, 15,b2_staticBody);
-		App->physics->CreateCircle(544, 866, 15,b2_staticBody);
-		App->physics->CreateCircle(150, 340, 15,b2_staticBody);
+	App->physics->CreateCircle(372, 569, 40,b2_staticBody);
+	App->physics->CreateCircle(535, 427, 40,b2_staticBody);
+	App->physics->CreateCircle(590, 280, 15,b2_staticBody);
+	App->physics->CreateCircle(550, 161, 15,b2_staticBody);
+	App->physics->CreateCircle(398, 161, 15,b2_staticBody);
+	App->physics->CreateCircle(305, 165, 15,b2_staticBody);
+	App->physics->CreateCircle(544, 866, 15,b2_staticBody);
+	App->physics->CreateCircle(150, 340, 15,b2_staticBody);
+
 	//Create Flippers
 
 	CreateFlipper(Left_Flipper, 205, 1095, 60, 20, 10, 0, -40, 45);
@@ -113,37 +113,53 @@ bool Colliders::Start()
 
 	Spring = App->physics->CreateRectangle(App->pinball->GetSpringPosition().x + 13, App->pinball->GetSpringPosition().y + 16, 27, 30,0, b2_kinematicBody);
 
-	
 
-	orange	= App->physics->CreateRectangleSensor(310, 1035, 70, 66, this);
-	blue	= App->physics->CreateRectangleSensor(240, 915,  70, 66, this);
-	green	= App->physics->CreateRectangleSensor(375, 915,  70, 66, this);
-	yellow	= App->physics->CreateRectangleSensor(180, 725,  70, 66, this);
-	pink	= App->physics->CreateRectangleSensor(320, 695,  70, 66, this);
-	red		= App->physics->CreateRectangleSensor(463, 732,  70, 66, this);
-	boy		= App->physics->CreateRectangleSensor(88,  920,  72, 78, this);
-	girl	= App->physics->CreateRectangleSensor(523, 920,  72, 78, this);
-	green_square_mid = App->physics->CreateRectangleSensor(343, 371, 50, 50, this);
-	green_square_top = App->physics->CreateRectangleSensor(487, 160, 50, 50, this);
-	ground = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, App->pinball->Background.rect.h, SCREEN_WIDTH, 10, this);
+	orange	= App->physics->CreateRectangleSensor(310, 1035, 70, 66,0, this);
+	blue	= App->physics->CreateRectangleSensor(240, 915,  70, 66,0, this);
+	green	= App->physics->CreateRectangleSensor(375, 915,  70, 66,0, this);
+	yellow	= App->physics->CreateRectangleSensor(180, 725,  70, 66,0, this);
+	pink	= App->physics->CreateRectangleSensor(320, 695,  70, 66,0, this);
+	red		= App->physics->CreateRectangleSensor(463, 732,  70, 66,0, this);
+	boy		= App->physics->CreateRectangleSensor(88,  920,  72, 78,0, this);
+	girl	= App->physics->CreateRectangleSensor(523, 920,  72, 78,0, this);
+	multiball = App->physics->CreateRectangleSensor(150, 180, 50,30,-30, this);
+	green_square_mid = App->physics->CreateRectangleSensor(343, 371, 50, 50, 0,this);
+	green_square_top = App->physics->CreateRectangleSensor(487, 160, 50, 50, 0,this);
+	ground = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, App->pinball->Background.rect.h, SCREEN_WIDTH, 10, 0,this);
+
+	left = App->physics->CreateChainSensor(0, 0, LeftDown, 10, this);
+	right = App->physics->CreateChainSensor(0, 0, RightDown, 12, this);
 
 	return true;
 }
 
 void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 {
-	if (last_collided == bodyA && !App->physics->have_touched) return;
+	if (last_collidedA == bodyA) return;
 	//Spawn a ball that collides with orange bonus to trigger it
 	bool to_score = true;
-	if (bodyA == green_square_mid) {
-		App->pinball->Green_Box1_Activated= true;
+
+	if (bodyA == multiball) {
+		LOG("MULTIBALL");
+		spawn_multiball = true;
+	}
+	else if (bodyA == left) {
+		App->pinball->left_activated = true;
+		LOG("LEFT")
+	}
+	else if (bodyA == right) {
+		App->pinball->right_activated = true;
+		LOG("RIGHT")
+	}
+	else if (bodyA == green_square_mid) {
+		App->pinball->Green_Box1_Activated = true;
 		LOG("ORANGE")
 	}
-	if (bodyA == green_square_top) {
+	else if (bodyA == green_square_top) {
 		App->pinball->Green_Box2_Activated = true;
 		LOG("ORANGE")
 	}
-	if (bodyA == orange) {
+	else if (bodyA == orange) {
 		App->pinball->Orange_Activated = true;
 		LOG("ORANGE")
 	}
@@ -170,12 +186,12 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 	else if (bodyA == boy) {
 		App->pinball->Boy_Activated = true;
 		LOG("boy")
-		App->player->score += 100;
+			App->player->score += 100;
 	}
 	else if (bodyA == girl) {
 		App->pinball->Girl_Activated = true;
 		LOG("girl")
-		App->player->score += 100;
+			App->player->score += 100;
 	}
 	else if (bodyA == green_square_mid) {
 		LOG("green_square_mid")
@@ -184,7 +200,19 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		LOG("green_square_top")
 	}
 	else if (bodyA == ground) {
-		LOG("ground");
+		if (App->player->current_balls > 0) {
+			App->player->current_balls--;
+		}
+		if (App->player->current_balls <= 0) {
+			App->player->current_balls = 0;
+			if (App->player->lifes <= 0) {
+				App->player->lifes = 0;
+				App->player->game_over = true;
+			}
+
+		}
+		LOG("ground %d", App->player->current_balls);
+
 		to_score = false;
 	}
 	else {
@@ -202,9 +230,11 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 
 	}
 	LOG("Score: %u", App->player->score);
-	last_collided = bodyA;
+	last_collidedA = bodyA;
+	
 
 }
+
 
 update_status Colliders::Update()
 {
