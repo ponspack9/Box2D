@@ -16,6 +16,7 @@ class Pinball;
 class ModuleFadeToBlack;
 class Colliders;
 class ModuleFonts;
+class ModuleParticles;
 
 
 class Application
@@ -33,6 +34,7 @@ public:
 	ModuleFadeToBlack*  fade;
 	Colliders*			colliders;
 	ModuleFonts*		fonts;
+	ModuleParticles*	particles;
 
 private:
 

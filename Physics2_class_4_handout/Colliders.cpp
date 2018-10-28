@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "Application.h"
 #include "ModulePlayer.h"
+#include "ModuleParticles.h"
 #include "Pinball.h"
 #include "ModuleAudio.h"
 
@@ -79,6 +80,15 @@ bool Colliders::Start()
 	App->physics->CreateChain(0, 0, LeftDown, 10);
 	App->physics->CreateChain(0, 0, RightBottom, 14);
 	App->physics->CreateChain(0, 0, LeftBottom, 14);
+	App->physics->CreateChainSensor(0, 0, Top_Right,		18,nullptr);
+	App->physics->CreateChainSensor(0, 0, Top_Left,			24,nullptr);
+	App->physics->CreateChainSensor(505, 724, Initial_Tube, 96,nullptr);
+	App->physics->CreateChainSensor(0, 0, Background,	   147,nullptr);
+	App->physics->CreateChainSensor(0, 0, UpLeftCurve,		82,nullptr);
+	App->physics->CreateChainSensor(0, 0, RightDown,		12,nullptr);
+	App->physics->CreateChainSensor(0, 0, LeftDown,			10,nullptr);
+	App->physics->CreateChainSensor(0, 0, RightBottom,		14,nullptr);
+	App->physics->CreateChainSensor(0, 0, LeftBottom,		14,nullptr);
 
 	circles.add(App->physics->CreateCircleSensor(372, 569, 40, this));
 	circles.add(App->physics->CreateCircleSensor(535, 427, 40, this));
@@ -135,69 +145,72 @@ bool Colliders::Start()
 
 void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 {
-	if (last_collidedA == bodyA) return;
+	if (last_collidedA == bodyA ) return;
 	//Spawn a ball that collides with orange bonus to trigger it
 	bool to_score = true;
-
+	int posx;
+	int posy;
+	bodyA->GetPosition(posx, posy);
 	if (bodyA == multiball) {
-		LOG("MULTIBALL");
+		//LOG("MULTIBALL");
 		spawn_multiball = true;
 	}
 	else if (bodyA == left) {
 		App->pinball->left_activated = true;
-		LOG("LEFT")
+		//LOG("LEFT")
 	}
 	else if (bodyA == right) {
 		App->pinball->right_activated = true;
-		LOG("RIGHT")
+		//LOG("RIGHT")
 	}
 	else if (bodyA == green_square_mid) {
 		App->pinball->Green_Box1_Activated = true;
-		LOG("ORANGE")
+		//LOG("ORANGE")
 	}
 	else if (bodyA == green_square_top) {
 		App->pinball->Green_Box2_Activated = true;
-		LOG("ORANGE")
+		//LOG("ORANGE")
 	}
 	else if (bodyA == orange) {
 		App->pinball->Orange_Activated = true;
-		LOG("ORANGE")
+		App->particles->AddParticle(App->particles->_100, posx, posy);
+		//LOG("ORANGE")
 	}
 	else if (bodyA == blue) {
 		App->pinball->Blue_Activated = true;
-		LOG("blue")
+		//LOG("blue")
 	}
 	else if (bodyA == green) {
 		App->pinball->Green_Activated = true;
-		LOG("green")
+		//LOG("green")
 	}
 	else if (bodyA == yellow) {
 		App->pinball->Yellow_Activated = true;
-		LOG("yellow")
+		//LOG("yellow")
 	}
 	else if (bodyA == pink) {
 		App->pinball->Pink_Activated = true;
-		LOG("pink")
+		//LOG("pink")
 	}
 	else if (bodyA == red) {
 		App->pinball->Red_Activated = true;
-		LOG("red")
+		//LOG("red")
 	}
 	else if (bodyA == boy) {
 		App->pinball->Boy_Activated = true;
-		LOG("boy")
+		//LOG("boy")
 			App->player->score += 100;
 	}
 	else if (bodyA == girl) {
 		App->pinball->Girl_Activated = true;
-		LOG("girl")
+		//LOG("girl")
 			App->player->score += 100;
 	}
 	else if (bodyA == green_square_mid) {
-		LOG("green_square_mid")
+		//LOG("green_square_mid")
 	}
 	else if (bodyA == green_square_top) {
-		LOG("green_square_top")
+		//LOG("green_square_top")
 	}
 	else if (bodyA == ground) {
 		if (App->player->current_balls > 0) {
@@ -211,7 +224,7 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			}
 
 		}
-		LOG("ground %d", App->player->current_balls);
+		//LOG("ground %d", App->player->current_balls);
 
 		to_score = false;
 	}
@@ -219,7 +232,7 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		p2List_item<PhysBody*>* c = circles.getFirst();
 		while (c != NULL) {
 			if (bodyA == c->data) {
-				LOG("circle");
+				//LOG("circle");
 				break;
 			}
 			c = c->next;
@@ -229,7 +242,7 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		App->player->score += 100;
 
 	}
-	LOG("Score: %u", App->player->score);
+	//LOG("Score: %u", App->player->score);
 	last_collidedA = bodyA;
 	
 
@@ -250,7 +263,7 @@ update_status Colliders::Update()
 		MidLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed);
 		App->audio->PlayFx(Flipper_FX);
 	
-		LOG("A");
+		//LOG("A");
 	}
 	
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
@@ -261,7 +274,7 @@ update_status Colliders::Update()
 		MidRight_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
 		App->audio->PlayFx(Flipper_FX);
 
-		LOG("D");
+		//LOG("D");
 	}
 	if (Left_Flipper.Flipper_joint->GetJointAngle() >= Left_Flipper.Flipper_joint->GetUpperLimit()) 
 	{
@@ -269,7 +282,7 @@ update_status Colliders::Update()
 		TopLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back);
 		MidLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back);
 		Left_flippers_Active = false;
-		LOG("TOPEEE Left");
+		//LOG("TOPEEE Left");
 	}
 
 	if (Right_Flipper.Flipper_joint->GetJointAngle() <= Right_Flipper.Flipper_joint->GetLowerLimit()) 
@@ -280,13 +293,13 @@ update_status Colliders::Update()
 		//MidRight_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
 		Right_flippers_Active = false;
 
-		LOG("TOPEEEE Right");
+		//LOG("TOPEEEE Right");
 	}
 	 //Can't get it work in the same if,, to check, AND some kind of delay 
 	if (MidRight_Flipper.Flipper_joint->GetJointAngle() <= MidRight_Flipper.Flipper_joint->GetLowerLimit()) {
 		MidRight_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
 
-		LOG("TOPEEE Mid");
+		//LOG("TOPEEE Mid");
 	}
 
 
@@ -306,6 +319,7 @@ void Colliders::CreateFlipper(Flipper &flipers, int x,int y, int width,int heigh
 
 	flipers.Placement = App->physics->CreateCircle(x, y, radius, b2_staticBody)->body;
 	flipers.ForceShape = App->physics->CreateRectangle(x, y, width, height, angle)->body;
+	App->physics->CreateRectangleSensor(x, y, width, height, angle, nullptr);
 
 	b2RevoluteJointDef revoluteJointDef;
 

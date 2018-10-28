@@ -12,6 +12,7 @@
 #include "ModuleFadeToBlack.h"
 #include "Colliders.h"
 #include "ModuleFonts.h"
+#include "ModuleParticles.h"
 
 #include "Application.h"
 
@@ -29,7 +30,7 @@ Application::Application()
 	fade		= new ModuleFadeToBlack(this);
 	colliders	= new Colliders(this);
 	fonts		= new ModuleFonts(this);
-
+	particles	= new ModuleParticles(this);
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -47,6 +48,7 @@ Application::Application()
 	AddModule(colliders);
 	AddModule(fade);
 	AddModule(fonts);
+	AddModule(particles);
 	// Scenes
 	pinball->Disable();
 	colliders->Disable();
