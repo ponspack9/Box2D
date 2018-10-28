@@ -56,9 +56,13 @@ public:
 	PhysBody* green_square_top;
 	PhysBody* multiball;
 
+	PhysBody* left;
+	PhysBody* right;
+
 	p2List<PhysBody*> circles;
 
-	PhysBody* last_collided;
+	PhysBody* last_collidedA;
+	PhysBody* last_collidedB;
 
 	PhysBody* ground;
 	bool spawn_multiball;

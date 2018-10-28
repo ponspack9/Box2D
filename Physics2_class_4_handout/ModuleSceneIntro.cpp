@@ -24,8 +24,8 @@ void ModuleSceneIntro::Multiball() {
 	App->colliders->multiball->GetPosition(x, y);
 	for (int i = App->player->current_balls; i <= 3; ++i) {
 		
-		AddBall(x + 80 + i * 5, y + 70 + i * 10, this);
-		circles.getLast()->data->body->ApplyForceToCenter(b2Vec2(35+i*6, 5+i*7),true);
+		AddBall(x + 80 + i * 5, y + 70 + i * 10);
+		circles.getLast()->data->body->ApplyForceToCenter(b2Vec2(SDL_GetTicks() % 40, SDL_GetTicks() % 10),true);
 	}
 	App->colliders->spawn_multiball = false;
 }
@@ -44,7 +44,7 @@ bool ModuleSceneIntro::Start()
 	rick = App->textures->Load("pinball/rick_head.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	AddBall(595,910,this);
+	//AddBall(595,910,this);
 	
 	return ret;
 }
@@ -58,9 +58,10 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
-void ModuleSceneIntro::AddBall(int x, int y, Module* callback){
+void ModuleSceneIntro::AddBall(int x, int y){
 	circles.add(App->physics->CreateCircle(x, y, 12));
-	circles.getLast()->data->listener = callback;
+	circles.getLast()->data->listener = this;
+	circles.getLast()->data->body->GetFixtureList()->SetRestitution(0.85f);
 	App->player->current_balls++;
 }
 // Update: draw background
@@ -70,7 +71,7 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		AddBall(App->input->GetMouseX(), App->input->GetMouseY(),this);
+		AddBall(App->input->GetMouseX(), App->input->GetMouseY());
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
@@ -176,6 +177,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		while (c != NULL) {
 			if (bodyA == c->data) {
 				LOG("GROUNDTODELETE");
+				//App->player->current_balls--;
 				//c->data->body->DestroyFixture(c->data->body->GetFixtureList());
 				break;
 			}

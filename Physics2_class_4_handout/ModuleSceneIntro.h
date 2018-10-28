@@ -17,7 +17,7 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
-	void AddBall(int x, int y, Module* callback = nullptr);
+	void AddBall(int x, int y);
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
