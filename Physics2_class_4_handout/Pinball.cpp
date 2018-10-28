@@ -6,6 +6,7 @@
 #include "ModuleRender.h"
 #include "ModuleInput.h"
 #include "ModuleFadeToBlack.h"
+#include "ModuleSceneIntro.h"
 #include "ModulePhysics.h"
 #include "ModuleAudio.h"
 #include "Colliders.h"
@@ -50,24 +51,61 @@ Pinball::~Pinball()
 
 }
 
+bool Pinball::CleanUp() {
+
+
+	/*p2List_item<SDL_Texture*>* c = App->textures->textures.getFirst();
+
+	while (c != NULL)
+	{
+		if (c->data != nullptr) {
+			App->textures->Unload(c->data);
+			c = c->next;
+		}
+	}*/
+
+	App->textures->Unload(Background.texture);
+	App->textures->Unload(Top_Score_Bar.texture);
+	App->textures->Unload(Black_Part_Top_Score.texture);
+	App->textures->Unload(Bonus_Girl_Boy_Message.texture);
+	App->textures->Unload(Bonus_AllBoxes_Message.texture);
+	App->textures->Unload(Bonus_Loop_Message.texture);
+	App->textures->Unload(Game_Over_Message.texture);
+	App->textures->Unload(Multiball_Message.texture);
+	App->textures->Unload(Top_Left_Bonus_Machine.texture);
+	App->textures->Unload(Orange_Active.texture);
+	App->textures->Unload(Green_Active.texture);
+	App->textures->Unload(Blue_Active.texture);
+	App->textures->Unload(Red_Active.texture);
+	App->textures->Unload(Pink_Active.texture);
+	App->textures->Unload(Yellow_Active.texture);
+
+	App->textures->Unload(Boy_Active.texture);
+	App->textures->Unload(Girl_Active.texture);
+	App->textures->Unload(Green_Box_Active.texture);
+	App->textures->Unload(Spring.texture);
+	App->textures->Unload(Initial_Tube.texture);
+	App->textures->Unload(KickerActive.texture);
+	App->textures->Unload(Flipper_MidLeft.texture);
+	App->textures->Unload(Flipper_MidRight.texture);
+	App->textures->Unload(Flipper_Left.texture);
+	App->textures->Unload(Flipper_Right.texture);
+	App->textures->Unload(Flipper_TopLeft.texture);
+	App->textures->Unload(Flipper_TopRight.texture);
+	App->textures->Unload(Ball.texture);
+
+		App->colliders->Disable();
+		App->physics->Disable();
+		
+		return true;
+}
+
 bool Pinball::Start() {
 
 	LOG("Starting pinball");
 
 	font_score = App->fonts->Load("Sprites/fonts3.png", "0123456789", 1);
 	
-
-	Yellow_Activated = false;
-	 Pink_Activated = false;
-	 Red_Activated = false;
-	Blue_Activated = false;
-	Green_Activated = false;
-	Orange_Activated = false;
-	Girl_Activated = false;
-	Boy_Activated = false;
-	Green_Box1_Activated = false;
-	Green_Box2_Activated = false;
-
 	//Music
 	Launcher_Down = App->audio->LoadFx("Audio/Launcher_Charge.wav");
 
@@ -136,13 +174,31 @@ bool Pinball::Start() {
 	//App->audio->PlayMusic("Audio/InGame_Music.wav", 0.0f);
 	ResetBall();
 
+	if (App->colliders->IsEnabled() == false) {
+		App->physics->Enable();
+		App->colliders->Enable();
+	}
+
+	Yellow_Activated = false;
+	 Pink_Activated = false;
+	 Red_Activated = false;
+	 Blue_Activated = false;
+	 Green_Activated = false;
+	 Orange_Activated = false;
+	 Girl_Activated = false;
+	 Boy_Activated = false;
+	 Green_Box1_Activated = false;
+	 Green_Box2_Activated = false;
+	 left_activated = false;
+	 right_activated = false;
+
 	AddBall(Ball.Position.x, Ball.Position.y);
 	//Balls.add(App->physics->CreateCircle(Ball.Position.x, Ball.Position.y, 12));
 	//Balls.getLast()->data->listener = this;
+	lifes = 3;
+	died = false;
 
-	if (App->colliders->IsEnabled() == false) {
-		App->colliders->Enable();
-	}
+
 
 	return true;
 
@@ -160,13 +216,18 @@ void Pinball::Multiball() {
 void Pinball::AddBall(int x, int y) {
 	Balls.add(App->physics->CreateCircle(x, y, 12));
 	Balls.getLast()->data->listener = this;
-	Balls.getLast()->data->body->GetFixtureList()->SetRestitution(0.85f);
+	Balls.getLast()->data->body->GetFixtureList()->SetRestitution(0.04f);
 	App->player->current_balls++;
 }
 
 update_status Pinball::Update()
 {
-	
+	if (died == true) {
+		AddBall(Ball.Position.x, Ball.Position.y);
+		died = false;
+	}
+
+
 	if (App->colliders->spawn_multiball && App->player->current_balls <= 4) Multiball();
 
 	//Spring Llogic
@@ -228,6 +289,7 @@ bool Pinball::Draw() {
 
 	bool ret = true;
 
+	
 	App->renderer->Blit(Background.texture, 0, 0, &Background.rect);
 	
 
@@ -335,6 +397,28 @@ bool Pinball::Draw() {
 	//Printing score
 	sprintf_s(score_text, 10, "%7d", App->player->score);
 	App->fonts->BlitText(0, -App->renderer->camera.y + 25, font_score, score_text);
+	sprintf_s(score_text, 10, "%7d", lifes);
+	App->fonts->BlitText(470, -App->renderer->camera.y + 25,font_score, score_text);
 
+	if (lifes < 0) {
+		App->fade->FadeToBlack(this, App->scene_intro,2.0f);
+	}
 	return ret;
+}
+
+void Pinball::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
+{
+
+
+	if (bodyB == App->colliders->ground){
+		
+		if (last_collided == bodyA) 
+			return;
+		Balls.del(Balls.getFirst());
+		--lifes;
+		died = true;
+		last_collided = bodyA;
+	}
+
+
 }

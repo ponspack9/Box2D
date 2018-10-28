@@ -25,17 +25,12 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
-
+	App->renderer->camera.y = 0;
 	Background.rect = { 0,0,629,500 };
 	Background.texture = App->textures->Load("Sprites/Main_Menu.png");
 	Play.rect = { 0,0,629,500 };
 	Play.texture = App->textures->Load("Sprites/Play_Active.png");
 
-
-	circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	//AddBall(595,910,this);
 	
@@ -84,21 +79,4 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 
-	if (last_collided == bodyB) return;
-
-	if (bodyB == App->colliders->ground) {
-		p2List_item<PhysBody*>* c = circles.getFirst();
-		while (c != NULL) {
-			if (bodyA == c->data) {
-				LOG("GROUNDTODELETE");
-				//App->player->current_balls--;
-				//c->data->body->DestroyFixture(c->data->body->GetFixtureList());
-				break;
-			}
-			c = c->next;
-		}
-	}
-	last_collided = bodyB;
-		
-	//App->audio->PlayFx(bonus_fx);
 }
