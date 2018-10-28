@@ -246,7 +246,7 @@ update_status Pinball::Update()
 	if (App->colliders->spawn_multiball && App->player->current_balls <= 4) Multiball();
 
 	//Spring Llogic
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 		App->audio->PlayFx(Launcher_Down);
 		Spring_Activated = true;
 		if (Spring.Position.y <= 1140) {
@@ -258,7 +258,7 @@ update_status Pinball::Update()
 			Velocity_Spring = 0;
 		}
 	}
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP) {
 		Spring_Activated = false;
 
 	}

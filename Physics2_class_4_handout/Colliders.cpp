@@ -151,11 +151,11 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 	int posx;
 	int posy;
 	bodyA->GetPosition(posx, posy);
-	if (bodyA == multiball) {
-		//LOG("MULTIBALL");
-		spawn_multiball = true;
-	}
-	else if (bodyA == left) {
+	//if (bodyA == multiball) {
+	//	//LOG("MULTIBALL");
+	//	spawn_multiball = true;
+	//}
+	if (bodyA == left) {
 		App->pinball->left_activated = true;
 		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("LEFT")
@@ -268,7 +268,7 @@ update_status Colliders::Update()
 	x = App->input->GetMouseX();
 	y = App->input->GetMouseY();
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
 		Left_flippers_Active = true;
 		Left_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed);
@@ -279,7 +279,7 @@ update_status Colliders::Update()
 		//LOG("A");
 	}
 	
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		Right_flippers_Active = true;
 		Right_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);

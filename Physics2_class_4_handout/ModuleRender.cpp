@@ -53,18 +53,18 @@ update_status ModuleRender::PreUpdate()
 // Update: debug camera
 update_status ModuleRender::Update()
 {
-	if (App->pinball->IsEnabled()) {
-		if (camera.y <= 0) {
-			if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
-				camera.y += 5;
-			}
-		}
-		if (camera.y >= -670) {
-			if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
-				camera.y -= 5;
-			}
-		}
-	}
+	//if (App->pinball->IsEnabled()) {
+	//	if (camera.y <= 0) {
+	//		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
+	//			camera.y += 5;
+	//		}
+	//	}
+	//	if (camera.y >= -670) {
+	//		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
+	//			camera.y -= 5;
+	//		}
+	//	}
+	//}
 	return UPDATE_CONTINUE;
 }
 
