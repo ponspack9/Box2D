@@ -145,7 +145,7 @@ bool Colliders::Start()
 
 void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 {
-	if (last_collidedA == bodyA ) return;
+	if (last_collidedA == bodyA || bodyB->body->GetFixtureList()->GetType() != b2Shape::e_circle) return;
 	//Spawn a ball that collides with orange bonus to trigger it
 	bool to_score = true;
 	int posx;
@@ -332,7 +332,7 @@ void Colliders::CreateFlipper(Flipper &flipers, int x,int y, int width,int heigh
 
 	flipers.Placement = App->physics->CreateCircle(x, y, radius, b2_staticBody)->body;
 	flipers.ForceShape = App->physics->CreateRectangle(x, y, width, height, angle)->body;
-	App->physics->CreateRectangleSensor(x, y, width, height, angle, nullptr);
+	//App->physics->CreateRectangleSensor(x, y, width, height, angle, nullptr);
 
 	b2RevoluteJointDef revoluteJointDef;
 
