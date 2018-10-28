@@ -136,8 +136,9 @@ bool Pinball::Start() {
 	//App->audio->PlayMusic("Audio/InGame_Music.wav", 0.0f);
 	ResetBall();
 
-	Balls.add(App->physics->CreateCircle(Ball.Position.x, Ball.Position.y, 12));
-	Balls.getLast()->data->listener = this;
+	AddBall(Ball.Position.x, Ball.Position.y);
+	//Balls.add(App->physics->CreateCircle(Ball.Position.x, Ball.Position.y, 12));
+	//Balls.getLast()->data->listener = this;
 
 	if (App->colliders->IsEnabled() == false) {
 		App->colliders->Enable();
@@ -146,11 +147,28 @@ bool Pinball::Start() {
 	return true;
 
 }
+void Pinball::Multiball() {
+	int x; int y;
+	App->colliders->multiball->GetPosition(x, y);
+	for (int i = App->player->current_balls; i <= 3; ++i) {
+
+		AddBall(x + 80, y + 70 );
+		Balls.getLast()->data->body->ApplyForceToCenter(b2Vec2(SDL_GetTicks() % 20, SDL_GetTicks() % 5), true);
+	}
+	App->colliders->spawn_multiball = false;
+}
+void Pinball::AddBall(int x, int y) {
+	Balls.add(App->physics->CreateCircle(x, y, 12));
+	Balls.getLast()->data->listener = this;
+	Balls.getLast()->data->body->GetFixtureList()->SetRestitution(0.85f);
+	App->player->current_balls++;
+}
 
 update_status Pinball::Update()
 {
 	
-	
+	if (App->colliders->spawn_multiball && App->player->current_balls <= 4) Multiball();
+
 	//Spring Llogic
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
 		App->audio->PlayFx(Launcher_Down);

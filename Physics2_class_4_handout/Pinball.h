@@ -15,6 +15,10 @@ public:
 
 	bool Start();
 
+	void Multiball();
+
+	void AddBall(int x, int y);
+
 	update_status Update();
 
 	bool Draw();

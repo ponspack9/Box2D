@@ -19,16 +19,6 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 ModuleSceneIntro::~ModuleSceneIntro()
 {}
 
-void ModuleSceneIntro::Multiball() {
-	int x; int y;
-	App->colliders->multiball->GetPosition(x, y);
-	for (int i = App->player->current_balls; i <= 3; ++i) {
-		
-		AddBall(x + 80 + i * 5, y + 70 + i * 10);
-		circles.getLast()->data->body->ApplyForceToCenter(b2Vec2(SDL_GetTicks() % 40, SDL_GetTicks() % 10),true);
-	}
-	App->colliders->spawn_multiball = false;
-}
 
 // Load assets
 bool ModuleSceneIntro::Start()
@@ -61,18 +51,12 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
-void ModuleSceneIntro::AddBall(int x, int y){
-	circles.add(App->physics->CreateCircle(x, y, 12));
-	circles.getLast()->data->listener = this;
-	circles.getLast()->data->body->GetFixtureList()->SetRestitution(0.85f);
-	App->player->current_balls++;
-}
+
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
 
 
-	if (App->colliders->spawn_multiball && App->player->current_balls <=4) Multiball();
 
 	//if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	//{
