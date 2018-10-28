@@ -18,6 +18,7 @@ public:
 	Colliders(Application* app, bool start_enabled=true);
 	~Colliders();
 	bool Start();
+	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 	update_status Update();
 public:
@@ -40,6 +41,21 @@ public:
 	float flipper_Speed_Right = -3.0f * b2_pi; //2PI radians/s
 	float flipper_speed_back = -5.0f;
 	float flipper_speed_back_right = 5.0f;
+
+	PhysBody* test;
+	PhysBody* orange;
+	PhysBody* blue;
+	PhysBody* green;
+	PhysBody* yellow;
+	PhysBody* pink;
+	PhysBody* red;
+	PhysBody* boy;
+	PhysBody* girl;
+	PhysBody* green_square_mid;
+	PhysBody* green_square_top;
+
+	//Debug purposes mouse position
+	int x, y;
 
 };
 

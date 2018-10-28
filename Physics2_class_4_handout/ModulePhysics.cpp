@@ -65,10 +65,7 @@ update_status ModulePhysics::PreUpdate()
 	{
 		if(c->GetFixtureA()->IsSensor() && c->IsTouching())
 		{
-			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
-			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
-			if(pb1 && pb2 && pb1->listener)
-				pb1->listener->OnCollision(pb1, pb2);
+			BeginContact(c);
 		}
 	}
 
@@ -125,14 +122,13 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, fl
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, Module* callback)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
-
 	b2PolygonShape box;
 	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
 
@@ -148,6 +144,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
+	pbody->listener = callback;
 
 	return pbody;
 }

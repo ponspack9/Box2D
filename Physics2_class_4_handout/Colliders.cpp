@@ -19,6 +19,8 @@ Colliders::~Colliders()
 
 bool Colliders::Start()
 {
+	//Create Background colliders
+
 	int Initial_Tube[96] = {78, 505,77, 448,78, 146,77, 133,75, 122,71, 110,66, 99,	60, 88,	54, 80,	45, 70,	37, 62,	29, 56,	8, 42,	-1, 62,	0, 67,	18, 76,	27, 83,	44, 104,56, 134,58, 183,57, 534,
 		123, 535,122, 147,122, 133,114, 76,79, 27,49, 10,42, 3,28, 0,24, 3,20, 14,37, 25,45, 32,56, 41,	62, 47,	69, 55,	76, 64,	83, 74,	91, 87,	96, 98,	100, 110,103, 122,105, 133,	106, 148,107, 203, 107, 450,106, 514,78, 514};
 	int Background[147] = {	640, 767,559, 739,	556, 733,558, 727,581, 686,566, 676,564, 672,565, 667,606, 592,602, 590,601, 549,612, 549,611, 358,603, 357,603, 314,611, 313,611, 81,605, 88,592, 78,585, 84,
@@ -46,6 +48,15 @@ bool Colliders::Start()
 	App->physics->CreateChain(0, 0, LeftDown, 10);
 	App->physics->CreateChain(0, 0, RightBottom, 14);
 	App->physics->CreateChain(0, 0, LeftBottom, 14);
+
+	App->physics->CreateCircle(372, 569, 40, b2_staticBody);
+	App->physics->CreateCircle(535, 427, 40, b2_staticBody);
+	App->physics->CreateCircle(590, 280, 15, b2_staticBody);
+	App->physics->CreateCircle(550, 161, 15, b2_staticBody);
+	App->physics->CreateCircle(398, 161, 15, b2_staticBody);
+	App->physics->CreateCircle(305, 165, 15, b2_staticBody);
+	App->physics->CreateCircle(544, 866, 15, b2_staticBody);
+	App->physics->CreateCircle(150, 340, 15, b2_staticBody);
 	
 	//Create Flippers
 
@@ -58,27 +69,28 @@ bool Colliders::Start()
 	CreateFlipper(TopLeft_Flipper, 400, 240, 50, 15, 10, 0, -40, 45);
 	CreateFlipper(TopRight_Flipper, 565, 240, 50, 15, 10, 170, -220, -145);
 
+	//Spring
 
 	Spring = App->physics->CreateRectangle(App->pinball->GetSpringPosition().x + 13, App->pinball->GetSpringPosition().y + 16, 27, 30,0, b2_kinematicBody);
-
-	//App->physics->CreateChain(402,239, Flipper_TopLeft, 20);
-	//App->physics->CreateChain(506, 239, Flipper_TopRight, 22);
-
-	App->physics->CreateCircle(372, 569, 40, b2_staticBody);
-	App->physics->CreateCircle(535, 427, 40, b2_staticBody);
-	App->physics->CreateCircle(590, 280, 15, b2_staticBody);
-	App->physics->CreateCircle(550, 161, 15, b2_staticBody);
-	App->physics->CreateCircle(398, 161, 15, b2_staticBody);
-	App->physics->CreateCircle(305, 165, 15, b2_staticBody);
-	App->physics->CreateCircle(544, 866, 15, b2_staticBody);
-	App->physics->CreateCircle(150, 340, 15, b2_staticBody);
+	test = App->physics->CreateRectangleSensor(500, 500, 50, 50, this);
+	orange = App->physics->CreateRectangleSensor(310, 1035, 60, 60, this);
 
 	return true;
 }
 
+void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
+{
+	//Spawn a ball that collides with orange bonus to trigger it
+	if (bodyA == orange) {
+		LOG("ORANGE")
+
+	}
+
+}
+
 update_status Colliders::Update() {
-	int x = App->input->GetMouseX();
-	int y = App->input->GetMouseY();
+	x = App->input->GetMouseX();
+	y = App->input->GetMouseY();
 
 
 
