@@ -93,7 +93,7 @@ bool Pinball::CleanUp() {
 	App->textures->Unload(Flipper_TopLeft.texture);
 	App->textures->Unload(Flipper_TopRight.texture);
 	App->textures->Unload(Ball.texture);
-
+	Balls.del(Balls.getFirst());
 		App->colliders->Disable();
 		App->physics->Disable();
 		
@@ -198,6 +198,7 @@ bool Pinball::Start() {
 	AddBall(Ball.Position.x, Ball.Position.y);
 	//Balls.add(App->physics->CreateCircle(Ball.Position.x, Ball.Position.y, 12));
 	//Balls.getLast()->data->listener = this;
+	score = 0;
 	lifes = 3;
 	died = false;
 
@@ -219,7 +220,7 @@ void Pinball::Multiball() {
 void Pinball::AddBall(int x, int y) {
 	Balls.add(App->physics->CreateCircle(x, y, 12));
 	Balls.getLast()->data->listener = this;
-	Balls.getLast()->data->body->GetFixtureList()->SetRestitution(0.04f);
+	Balls.getLast()->data->body->GetFixtureList()->SetRestitution(0.5f);
 	App->player->current_balls++;
 }
 
@@ -289,7 +290,7 @@ update_status Pinball::Update()
 		 c->data->GetPosition(x, y);
 		 App->renderer->Blit(Ball.texture, x, y, NULL, 1.0f);
 
-		 App->renderer->camera.y = -y + 400;
+		 App->renderer->camera.y = -y + 300;
 		
 		 c = c->next;
 	 }
