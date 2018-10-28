@@ -9,6 +9,8 @@
 #include "ModulePhysics.h"
 #include "ModuleAudio.h"
 #include "Colliders.h"
+#include "ModulePlayer.h"
+#include "ModuleFonts.h"
 
 
 Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabled){
@@ -52,6 +54,7 @@ bool Pinball::Start() {
 
 	LOG("Starting pinball");
 
+	font_score = App->fonts->Load("Sprites/fonts3.png", "0123456789", 1);
 	
 
 	Yellow_Activated = false;
@@ -198,7 +201,7 @@ update_status Pinball::Update()
 		 c = c->next;
 	 }
 
-
+	
 	
 	return UPDATE_CONTINUE;
 }
@@ -311,7 +314,9 @@ bool Pinball::Draw() {
 	App->renderer->Blit(Black_Part_Top_Score.texture, 0, -App->renderer->camera.y, &Black_Part_Top_Score.rect);
 	App->renderer->Blit(Bonus_Girl_Boy_Message.texture, 0, (-App->renderer->camera.y)+9, &Bonus_Girl_Boy_Message.rect);
 	App->renderer->Blit(Top_Score_Bar.texture, 0, -App->renderer->camera.y, &Top_Score_Bar.rect);
-	
+	//Printing score
+	sprintf_s(score_text, 10, "%7d", App->player->score);
+	App->fonts->BlitText(0, -App->renderer->camera.y + 25, font_score, score_text);
 
 	return ret;
 }

@@ -296,8 +296,8 @@ update_status Colliders::Update()
 	if (METERS_TO_PIXELS(Spring->body->GetPosition().y) >= 1037 && App->pinball->Spring_Stop == true) {
 		Spring->body->SetLinearVelocity(b2Vec2(0, -2));
 	}
-	LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
-	LOG("Mouse [%d,%d]", x, y);
+	//LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
+	//LOG("Mouse [%d,%d]", x, y);
 
 	return UPDATE_CONTINUE;
 }

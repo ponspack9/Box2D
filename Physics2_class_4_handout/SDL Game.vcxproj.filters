@@ -65,6 +65,9 @@
     <ClInclude Include="Colliders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleFonts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -107,6 +110,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Colliders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleFonts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

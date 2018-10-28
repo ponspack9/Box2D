@@ -56,6 +56,8 @@ public:
 	bool left_activated;
 	bool right_activated;
 
+	int font_score;
+	char score_text[10];
 
 private :
 
