@@ -45,8 +45,8 @@ Application::Application()
 	AddModule(colliders);
 	AddModule(fade);
 	// Scenes
-	//pinball->Disable();
-	
+	pinball->Disable();
+	colliders->Disable();
 	// Player
 	AddModule(player);
 }
@@ -65,7 +65,7 @@ Application::~Application()
 bool Application::Init()
 {
 	bool ret = true;
-
+	
 	// Call Init() in all modules
 	p2List_item<Module*>* item = list_modules.getFirst();
 

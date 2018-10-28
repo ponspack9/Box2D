@@ -8,6 +8,7 @@
 #include "ModuleFadeToBlack.h"
 #include "ModulePhysics.h"
 #include "ModuleAudio.h"
+#include "Colliders.h"
 
 
 Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabled){
@@ -37,7 +38,8 @@ Pinball::Pinball(Application* app, bool start_enabled) : Module(app, start_enabl
 	Flipper_MidRight.rect=Flipper_MidLeft.rect = { 0,0,37,61 };
 	Flipper_Left.rect=Flipper_Right.rect = { 0,0,71,64 };
 	Ball.rect = { 0,0,32,32 };
-
+	Angle_Right = 0;
+	Angle_Left = 0;
 }
 
 
@@ -50,6 +52,7 @@ bool Pinball::Start() {
 
 	LOG("Starting pinball");
 
+	
 
 	Yellow_Activated = false;
 	 Pink_Activated = false;
@@ -133,7 +136,12 @@ bool Pinball::Start() {
 	Balls.add(App->physics->CreateCircle(Ball.Position.x, Ball.Position.y, 12));
 	Balls.getLast()->data->listener = this;
 
+	if (App->colliders->IsEnabled() == false) {
+		App->colliders->Enable();
+	}
+
 	return true;
+
 }
 
 update_status Pinball::Update()
@@ -184,25 +192,15 @@ update_status Pinball::Update()
 		 int x, y;
 		 c->data->GetPosition(x, y);
 		 App->renderer->Blit(Ball.texture, x, y, NULL, 1.0f);
+
+		 App->renderer->camera.y = -y + 400;
+		
 		 c = c->next;
 	 }
 
 
 	
 	return UPDATE_CONTINUE;
-}
-
-void Pinball::flicker(bool tochange) {
-
-	for (int i = 0; i < 50; i++) {
-		if (i % 2 == 0) {
-			tochange = false;
-		}
-		else {
-			tochange = true;
-		}
-	}
-	tochange = true;
 }
 
 bool Pinball::Draw() {
@@ -261,14 +259,46 @@ bool Pinball::Draw() {
 
 
 	//Flippers
-	App->renderer->Blit(Flipper_Left.texture, Flipper_Left.Position.x, Flipper_Left.Position.y, &Flipper_Left.rect);
-	App->renderer->Blit(Flipper_Right.texture, Flipper_Right.Position.x, Flipper_Right.Position.y, &Flipper_Right.rect);
+	if (App->colliders->Right_flippers_Active == true) {
+		App->renderer->Blit(Flipper_Right.texture, Flipper_Right.Position.x, Flipper_Right.Position.y, &Flipper_Right.rect,1,Angle_Right,Flipper_Right.rect.w,0 );
+		App->renderer->Blit(Flipper_MidRight.texture, Flipper_MidRight.Position.x, Flipper_MidRight.Position.y, &Flipper_MidRight.rect, 1, Angle_Right, Flipper_MidRight.rect.w,0);
+		App->renderer->Blit(Flipper_TopRight.texture, Flipper_TopRight.Position.x, Flipper_TopRight.Position.y, &Flipper_TopRight.rect, 1, Angle_Right, Flipper_TopRight.rect.w,0);
+		Angle_Right += 6;
+	}
+	else if (App->colliders->Right_flippers_Active == false && Angle_Right >=0) {
+		App->renderer->Blit(Flipper_Right.texture, Flipper_Right.Position.x, Flipper_Right.Position.y, &Flipper_Right.rect, 1, Angle_Right, Flipper_Right.rect.w, 0);
+		App->renderer->Blit(Flipper_MidRight.texture, Flipper_MidRight.Position.x, Flipper_MidRight.Position.y, &Flipper_MidRight.rect, 1, Angle_Right, Flipper_MidRight.rect.w,0);
+		App->renderer->Blit(Flipper_TopRight.texture, Flipper_TopRight.Position.x, Flipper_TopRight.Position.y, &Flipper_TopRight.rect, 1, Angle_Right, Flipper_TopRight.rect.w,0);
+		Angle_Right -= 6;
+	}
+	else {
+		App->renderer->Blit(Flipper_Right.texture, Flipper_Right.Position.x, Flipper_Right.Position.y, &Flipper_Right.rect);
+		App->renderer->Blit(Flipper_MidRight.texture, Flipper_MidRight.Position.x, Flipper_MidRight.Position.y, &Flipper_MidRight.rect);
+		App->renderer->Blit(Flipper_TopRight.texture, Flipper_TopRight.Position.x, Flipper_TopRight.Position.y, &Flipper_TopRight.rect);
 
-	App->renderer->Blit(Flipper_MidLeft.texture, Flipper_MidLeft.Position.x, Flipper_MidLeft.Position.y, &Flipper_MidLeft.rect);
-	App->renderer->Blit(Flipper_MidRight.texture, Flipper_MidRight.Position.x, Flipper_MidRight.Position.y, &Flipper_MidRight.rect);
+	}
 
-	App->renderer->Blit(Flipper_TopLeft.texture, Flipper_TopLeft.Position.x, Flipper_TopLeft.Position.y, &Flipper_TopLeft.rect);
-	App->renderer->Blit(Flipper_TopRight.texture, Flipper_TopRight.Position.x, Flipper_TopRight.Position.y, &Flipper_TopRight.rect);
+
+	if (App->colliders->Left_flippers_Active == true) {
+		App->renderer->Blit(Flipper_Left.texture, Flipper_Left.Position.x, Flipper_Left.Position.y, &Flipper_Left.rect, 1, Angle_Left, 0, 0);
+		App->renderer->Blit(Flipper_MidLeft.texture, Flipper_MidLeft.Position.x, Flipper_MidLeft.Position.y, &Flipper_MidLeft.rect, 1, Angle_Left, 0, 0);
+		App->renderer->Blit(Flipper_TopLeft.texture, Flipper_TopLeft.Position.x, Flipper_TopLeft.Position.y, &Flipper_TopLeft.rect, 1, Angle_Left, 0, 0);
+			Angle_Left -= 6;
+	}
+	else if (App->colliders->Left_flippers_Active == false && Angle_Left <=-25) {
+		App->renderer->Blit(Flipper_Left.texture, Flipper_Left.Position.x, Flipper_Left.Position.y, &Flipper_Left.rect, 1, Angle_Left,0, 0);
+		App->renderer->Blit(Flipper_MidLeft.texture, Flipper_MidLeft.Position.x, Flipper_MidLeft.Position.y, &Flipper_MidLeft.rect, 1, Angle_Left, 0, 0);
+		App->renderer->Blit(Flipper_TopLeft.texture, Flipper_TopLeft.Position.x, Flipper_TopLeft.Position.y, &Flipper_TopLeft.rect, 1, Angle_Left, 0, 0);
+		Angle_Left += 6;
+	}
+	else {
+		App->renderer->Blit(Flipper_Left.texture, Flipper_Left.Position.x, Flipper_Left.Position.y, &Flipper_Left.rect);
+		App->renderer->Blit(Flipper_MidLeft.texture, Flipper_MidLeft.Position.x, Flipper_MidLeft.Position.y, &Flipper_MidLeft.rect);
+		App->renderer->Blit(Flipper_TopLeft.texture, Flipper_TopLeft.Position.x, Flipper_TopLeft.Position.y, &Flipper_TopLeft.rect);
+
+	}
+	
+
 
 
 	//Spring

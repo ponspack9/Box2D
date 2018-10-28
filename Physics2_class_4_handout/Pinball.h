@@ -28,6 +28,9 @@ public:
 	iPoint GetSpringPosition() const {
 		return Spring.Position;
 	};
+
+	int Angle_Right;
+	int Angle_Left;
 	int Velocity_Spring;
 	bool Spring_Activated = false;
 	bool Spring_Stop = true;
@@ -53,7 +56,6 @@ public:
 	bool left_activated;
 	bool right_activated;
 
-	void Pinball::flicker(bool tochange);
 
 private :
 
