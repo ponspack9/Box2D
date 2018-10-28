@@ -160,7 +160,7 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
-
+	
 	/*App->pinball->Draw();*/
 
 	return UPDATE_CONTINUE;
@@ -168,6 +168,7 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
+
 	if (last_collided == bodyB) return;
 
 	if (bodyB == App->colliders->ground) {
@@ -182,5 +183,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 	}
 	last_collided = bodyB;
-	App->audio->PlayFx(bonus_fx);
+		
+	//App->audio->PlayFx(bonus_fx);
 }

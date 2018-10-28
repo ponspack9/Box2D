@@ -25,8 +25,8 @@ public:
 	update_status Update();
 public:
 
-	b2Body* Attach;
-	b2Body* flipper;
+	uint Flipper_FX;
+
 	PhysBody* Spring;
 	b2RevoluteJoint* flipper_joint;
 
