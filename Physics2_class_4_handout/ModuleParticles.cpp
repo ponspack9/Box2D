@@ -12,7 +12,7 @@ ModuleParticles::ModuleParticles(Application* app, bool start_enabled) : Module(
 	for(uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 		active[i] = nullptr;
 
-	_100.anim.PushBack({ 0,0,85,85 });
+	_100.anim.PushBack({ 0,0,67,22 });
 	_100.anim.speed = 1.0f;
 	_100.speed = iPoint(0, -2);
 	_100.life = 500;
@@ -26,7 +26,7 @@ ModuleParticles::~ModuleParticles()
 bool ModuleParticles::Start()
 {
 	LOG("Loading particles");
-	graphics = App->textures->Load("Sprites/Kicker_Active.png");
+	graphics = App->textures->Load("Sprites/_100.png");
 
 	return true;
 }

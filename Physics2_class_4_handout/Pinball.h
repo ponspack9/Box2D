@@ -72,7 +72,9 @@ public:
 	bool Green_Box2_Activated;
 	bool left_activated;
 	bool right_activated;
-
+	bool bonusAllBoxes;
+		bool allBoxesPass;
+		bool sumedPoints;
 	int font_score;
 	char score_text[10];
 

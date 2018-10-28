@@ -146,9 +146,10 @@ bool Pinball::Start() {
 	Flipper_Right.texture = App->textures->Load("Sprites/Flipper_Right.png");
 	Flipper_TopLeft.texture = App->textures->Load("Sprites/Flipper_TopLeft.png");
 	Flipper_TopRight.texture = App->textures->Load("Sprites/Flipper_TopRight.png");
-
-
 	Ball.texture = App->textures->Load("Sprites/Ball.png");
+
+
+	Bonus_AllBoxes_Message.Position.x = 490;
 
 	Flipper_MidRight.Position.x = 544;
 	Flipper_MidRight.Position.y = 672;
@@ -191,6 +192,8 @@ bool Pinball::Start() {
 	 Green_Box2_Activated = false;
 	 left_activated = false;
 	 right_activated = false;
+	 bonusAllBoxes = false;
+	 allBoxesPass = false;
 
 	AddBall(Ball.Position.x, Ball.Position.y);
 	//Balls.add(App->physics->CreateCircle(Ball.Position.x, Ball.Position.y, 12));
@@ -227,6 +230,17 @@ update_status Pinball::Update()
 		died = false;
 	}
 
+	if (Green_Activated&&Yellow_Activated&&Pink_Activated&&Red_Activated&&Blue_Activated&&Orange_Activated) {
+		bonusAllBoxes = true;
+	}
+	if (bonusAllBoxes && !sumedPoints) {
+		score += 15000;
+		sumedPoints = true;
+	}
+
+	if (bonusAllBoxes&&!allBoxesPass) {
+		Bonus_AllBoxes_Message.Position.x-=3;
+	}
 
 	if (App->colliders->spawn_multiball && App->player->current_balls <= 4) Multiball();
 
@@ -392,10 +406,12 @@ bool Pinball::Draw() {
 
 	//Top Score Bar
 	App->renderer->Blit(Black_Part_Top_Score.texture, 0, -App->renderer->camera.y, &Black_Part_Top_Score.rect);
-	App->renderer->Blit(Bonus_Girl_Boy_Message.texture, 0, (-App->renderer->camera.y)+9, &Bonus_Girl_Boy_Message.rect);
+	App->renderer->Blit(Bonus_AllBoxes_Message.texture, Bonus_AllBoxes_Message.Position.x, (-App->renderer->camera.y) + 9, &Bonus_Girl_Boy_Message.rect);
+	//App->renderer->Blit(Bonus_Girl_Boy_Message.texture, 0, (-App->renderer->camera.y)+9, &Bonus_Girl_Boy_Message.rect);
 	App->renderer->Blit(Top_Score_Bar.texture, 0, -App->renderer->camera.y, &Top_Score_Bar.rect);
+	
 	//Printing score
-	sprintf_s(score_text, 10, "%7d", App->player->score);
+	sprintf_s(score_text, 10, "%7d", score);
 	App->fonts->BlitText(0, -App->renderer->camera.y + 25, font_score, score_text);
 	sprintf_s(score_text, 10, "%7d", lifes);
 	App->fonts->BlitText(470, -App->renderer->camera.y + 25,font_score, score_text);
@@ -408,8 +424,6 @@ bool Pinball::Draw() {
 
 void Pinball::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-
-
 	if (bodyB == App->colliders->ground){
 		
 		if (last_collided == bodyA) 

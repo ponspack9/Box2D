@@ -157,18 +157,22 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 	}
 	else if (bodyA == left) {
 		App->pinball->left_activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("LEFT")
 	}
 	else if (bodyA == right) {
 		App->pinball->right_activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("RIGHT")
 	}
 	else if (bodyA == green_square_mid) {
 		App->pinball->Green_Box1_Activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("ORANGE")
 	}
 	else if (bodyA == green_square_top) {
 		App->pinball->Green_Box2_Activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("ORANGE")
 	}
 	else if (bodyA == orange) {
@@ -178,38 +182,47 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 	}
 	else if (bodyA == blue) {
 		App->pinball->Blue_Activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("blue")
 	}
 	else if (bodyA == green) {
 		App->pinball->Green_Activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("green")
 	}
 	else if (bodyA == yellow) {
 		App->pinball->Yellow_Activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("yellow")
 	}
 	else if (bodyA == pink) {
 		App->pinball->Pink_Activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("pink")
 	}
 	else if (bodyA == red) {
 		App->pinball->Red_Activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("red")
 	}
 	else if (bodyA == boy) {
 		App->pinball->Boy_Activated = true;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("boy")
-			App->player->score += 100;
+		App->pinball->score += 100;
 	}
 	else if (bodyA == girl) {
 		App->pinball->Girl_Activated = true;
 		//LOG("girl")
-			App->player->score += 100;
+		App->pinball->score += 100;
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 	}
 	else if (bodyA == green_square_mid) {
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("green_square_mid")
 	}
 	else if (bodyA == green_square_top) {
+		App->particles->AddParticle(App->particles->_100, posx, posy);
 		//LOG("green_square_top")
 	}
 	else if (bodyA == ground) {
@@ -239,7 +252,7 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		}
 	}
 	if (to_score) {
-		App->player->score += 100;
+		App->pinball->score += 100;
 
 	}
 	//LOG("Score: %u", App->player->score);
