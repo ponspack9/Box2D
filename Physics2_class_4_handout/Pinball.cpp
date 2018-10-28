@@ -109,7 +109,7 @@ bool Pinball::Start() {
 	Flipper_Left.Position.x = 205;
 	Flipper_Left.Position.y = 1088;
 
-
+	score = 0;
 	Velocity_Spring = 0;
 
 	ResetBall();

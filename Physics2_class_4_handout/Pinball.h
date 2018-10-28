@@ -32,18 +32,17 @@ public:
 	bool Spring_Activated = false;
 	bool Spring_Stop = true;
 
+	Sprite Background;
+	uint score;
+
+
 private :
 
 	bool StartState = true;
 
-
 	int Spring_Position;
 	int Initial_Spring_Position;
 
-
-	
-
-	Sprite Background;
 	Sprite Top_Score_Bar;
 	Sprite Black_Part_Top_Score;
 
@@ -64,8 +63,6 @@ private :
 	Sprite Green_Box_Active;
 
 	Sprite Top_Left_Bonus_Machine;
-
-	
 	
 	Sprite Spring;
 

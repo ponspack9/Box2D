@@ -42,7 +42,6 @@ public:
 	float flipper_speed_back = -5.0f;
 	float flipper_speed_back_right = 5.0f;
 
-	PhysBody* test;
 	PhysBody* orange;
 	PhysBody* blue;
 	PhysBody* green;
@@ -54,8 +53,11 @@ public:
 	PhysBody* green_square_mid;
 	PhysBody* green_square_top;
 
+	PhysBody* ground;
+
 	//Debug purposes mouse position
-	int x, y;
+	int x;
+	int y;
 
 };
 

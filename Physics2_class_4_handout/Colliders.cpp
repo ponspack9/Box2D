@@ -72,8 +72,18 @@ bool Colliders::Start()
 	//Spring
 
 	Spring = App->physics->CreateRectangle(App->pinball->GetSpringPosition().x + 13, App->pinball->GetSpringPosition().y + 16, 27, 30,0, b2_kinematicBody);
-	test = App->physics->CreateRectangleSensor(500, 500, 50, 50, this);
-	orange = App->physics->CreateRectangleSensor(310, 1035, 60, 60, this);
+
+	orange	= App->physics->CreateRectangleSensor(310, 1035, 70, 66, this);
+	blue	= App->physics->CreateRectangleSensor(240, 915,  70, 66, this);
+	green	= App->physics->CreateRectangleSensor(375, 915,  70, 66, this);
+	yellow	= App->physics->CreateRectangleSensor(180, 725,  70, 66, this);
+	pink	= App->physics->CreateRectangleSensor(320, 695,  70, 66, this);
+	red		= App->physics->CreateRectangleSensor(463, 732,  70, 66, this);
+	boy		= App->physics->CreateRectangleSensor(88,  920,  72, 78, this);
+	girl	= App->physics->CreateRectangleSensor(523, 920,  72, 78, this);
+	green_square_mid = App->physics->CreateRectangleSensor(343, 371, 50, 50, this);
+	green_square_top = App->physics->CreateRectangleSensor(487, 160, 50, 50, this);
+	ground = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, App->pinball->Background.rect.h, SCREEN_WIDTH, 10, this);
 
 	return true;
 }
@@ -81,24 +91,49 @@ bool Colliders::Start()
 void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 {
 	//Spawn a ball that collides with orange bonus to trigger it
+	bool to_score = true;
 	if (bodyA == orange) {
 		LOG("ORANGE")
+	}
+	else if (bodyA == blue) {
+		LOG("blue")
+	}
+	else if (bodyA == green) {
+		LOG("green")
+	}
+	else if (bodyA == yellow) {
+		LOG("yellow")
+	}
+	else if (bodyA == pink) {
+		LOG("pink")
+	}
+	else if (bodyA == red) {
+		LOG("red")
+	}
+	else if (bodyA == boy) {
+		LOG("boy")
+	}
+	else if (bodyA == girl) {
+		LOG("girl")
+	}
+	else if (bodyA == ground) {
+		LOG("ground");
+		to_score = false;
+	}
+	if (to_score) {
+		App->pinball->score += 100;
 
 	}
-
 }
 
-update_status Colliders::Update() {
+update_status Colliders::Update()
+{
+
 	x = App->input->GetMouseX();
 	y = App->input->GetMouseY();
 
-
-
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		//flipper_joint->
-		//Left_Flipper.Flipper_joint->EnableMotor (true);
-		//MidLeft_Flipper.Flipper_joint->EnableMotor(true);
 		Left_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed);
 		TopLeft_Flipper.Flipper_joint->SetMotorSpeed (flipper_speed);
 		MidLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed);
@@ -108,34 +143,34 @@ update_status Colliders::Update() {
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		//flipper_joint->
-		//Right_Flipper.Flipper_joint->EnableMotor(true);
-		//MidRight_Flipper.Flipper_joint->EnableMotor(true);
 		Right_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
 		TopRight_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
 		MidRight_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
+
 		LOG("D");
 	}
-	if (Left_Flipper.Flipper_joint->GetJointAngle() >= Left_Flipper.Flipper_joint->GetUpperLimit()) {
-		LOG("TOPEEE");
+	if (Left_Flipper.Flipper_joint->GetJointAngle() >= Left_Flipper.Flipper_joint->GetUpperLimit()) 
+	{
 		Left_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back);
 		TopLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back);
 		MidLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back);
 
+		LOG("TOPEEE Left");
 	}
 
-	if (Right_Flipper.Flipper_joint->GetJointAngle() <= Right_Flipper.Flipper_joint->GetLowerLimit()) {
-		LOG("TOPEEE %f , %f",Right_Flipper.Flipper_joint->GetJointAngle(), MidRight_Flipper.Flipper_joint->GetJointAngle());
+	if (Right_Flipper.Flipper_joint->GetJointAngle() <= Right_Flipper.Flipper_joint->GetLowerLimit()) 
+	{
 		Right_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
 		TopRight_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
 		//MidRight_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
 
+		LOG("TOPEEEE Right");
 	}
 	// Can't get it work in the same if,, to check, AND some kind of delay 
 	if (MidRight_Flipper.Flipper_joint->GetJointAngle() <= MidRight_Flipper.Flipper_joint->GetLowerLimit()) {
-		LOG("TOPEEE %f , %f", Right_Flipper.Flipper_joint->GetJointAngle(), MidRight_Flipper.Flipper_joint->GetJointAngle());
 		MidRight_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed_back_right);
 
+		LOG("TOPEEE Mid");
 	}
 
 
@@ -146,7 +181,8 @@ update_status Colliders::Update() {
 		Spring->body->SetLinearVelocity(b2Vec2(0, -2));
 	}
 	//LOG("SPring_Position:%d", METERS_TO_PIXELS(Spring->body->GetPosition().y));
-	//LOG("Mouse [%d,%d]", x, y);
+	LOG("Mouse [%d,%d]", x, y);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -155,22 +191,22 @@ void Colliders::CreateFlipper(Flipper &flipers, int x,int y, int width,int heigh
 	flipers.Placement = App->physics->CreateCircle(x, y, radius, b2_staticBody)->body;
 	flipers.ForceShape = App->physics->CreateRectangle(x, y, width, height, angle)->body;
 
-	//flipers.Placement = App->physics->CreateCircle(205, 1095, 20, b2_staticBody)->body;
-	//flipers.Flipper = App->physics->CreateRectangle(205, 1095, 80, 30, 0.14)->body;
-
 	b2RevoluteJointDef revoluteJointDef;
+
 	revoluteJointDef.bodyA = flipers.ForceShape;
 	revoluteJointDef.bodyB = flipers.Placement;
-	//b2Vec2 v = { PIXEL_TO_METERS(-40), PIXEL_TO_METERS(0) };
-	//revoluteJointDef.Initialize(m_bodyA, m_bodyB, v);
-	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(-width/1.3), PIXEL_TO_METERS(0));//the top right corner of the box
-	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));//center of the circle
+	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(-width/1.3), PIXEL_TO_METERS(0)); 
+	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)); 
+
 	revoluteJointDef.lowerAngle = low_Angle*DEGTORAD;
 	revoluteJointDef.upperAngle = max_Angle*DEGTORAD;
-	revoluteJointDef.enableLimit = true;
+
 	revoluteJointDef.motorSpeed = flipper_speed;
 	revoluteJointDef.maxMotorTorque = 1000.0f;
+
+	revoluteJointDef.enableLimit = true;
 	revoluteJointDef.enableMotor = true;
+	revoluteJointDef.collideConnected = false;
+
 	flipers.Flipper_joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&revoluteJointDef);
 }
