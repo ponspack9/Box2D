@@ -21,6 +21,7 @@ public:
 	bool Start();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
+
 	update_status Update();
 public:
 
@@ -53,13 +54,14 @@ public:
 	PhysBody* girl;
 	PhysBody* green_square_mid;
 	PhysBody* green_square_top;
+	PhysBody* multiball;
 
 	p2List<PhysBody*> circles;
 
 	PhysBody* last_collided;
 
 	PhysBody* ground;
-
+	bool spawn_multiball;
 	//Debug purposes mouse position
 	int x;
 	int y;
