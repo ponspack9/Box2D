@@ -34,6 +34,24 @@ public:
 
 	Sprite Background;
 
+	p2List<PhysBody*> Balls;
+	
+	uint Launcher_Down;
+	uint InGame_Music;
+	uint Flipper_FX;
+
+	bool Yellow_Activated;
+	bool Pink_Activated;
+	bool Red_Activated;
+	bool Blue_Activated;
+	bool Green_Activated;
+	bool Orange_Activated;
+	bool Girl_Activated;
+	bool Boy_Activated;
+	bool Green_Box1_Activated;
+	bool Green_Box2_Activated;
+
+	void Pinball::flicker(bool tochange);
 
 private :
 
@@ -41,6 +59,9 @@ private :
 
 	int Spring_Position;
 	int Initial_Spring_Position;
+	
+	
+
 
 	Sprite Top_Score_Bar;
 	Sprite Black_Part_Top_Score;

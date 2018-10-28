@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "ModulePlayer.h"
 #include "Pinball.h"
+#include "ModuleAudio.h"
 
 
 
@@ -20,6 +21,9 @@ Colliders::~Colliders()
 
 bool Colliders::Start()
 {
+
+	Flipper_FX = App->audio->LoadFx("Audio/Flipper_Fx.wav");
+
 	//Create Background colliders
 
 	int Initial_Tube[96] = {78, 505,77, 448,78, 146,77, 133,75, 122,71, 110,66, 99,	60, 88,	54, 80,	45, 70,	37, 62,	29, 56,	8, 42,	-1, 62,	0, 67,	18, 76,	27, 83,	44, 104,56, 134,58, 183,57, 534,
@@ -41,7 +45,34 @@ bool Colliders::Start()
 	int Flipper_MidRight[22] = { 29, 1,	37, 9,	38, 18,	15, 58,	11, 61,	4, 60,	0, 56,	0, 47,	11, 7,	18, 0,	26, 0};
 	int Flipper_TopLeft[20] = {	0, 6, 6, 0, 16, 0, 54, 36,	54, 46,	48, 49,	42, 47,	5, 26,	0, 19,	0, 9};
 	int Flipper_TopRight[22] = { 52, 5,	53, 10,	53, 19,	50, 25,	8, 49,	4, 49,	0, 44,	0, 36,	36, 1,	43, -1,	49, 2 };
+	int Top_Left[24] = {
+		352, 178,
+		366, 207,
+		410, 234,
+		411, 241,
+		410, 246,
+		403, 256,
+		399, 258,
+		353, 230,
+		340, 200,
+		334, 186,
+		342, 186,
+		348, 182
+	};
+	int Top_Right[18] = {
+		608, 232,
+		570, 255,
+		564, 256,
+		554, 247,
+		550, 236,
+		592, 210,
+		603, 193,
+		617, 197,
+		611, 229
+	};
 
+	App->physics->CreateChain(0, 0, Top_Right, 18);
+	App->physics->CreateChain(0, 0, Top_Left, 24);
 	App->physics->CreateChain(505, 724, Initial_Tube, 96);
 	App->physics->CreateChain(0, 0, Background, 147);
 	App->physics->CreateChain(0, 0, UpLeftCurve, 82);
@@ -82,6 +113,8 @@ bool Colliders::Start()
 
 	Spring = App->physics->CreateRectangle(App->pinball->GetSpringPosition().x + 13, App->pinball->GetSpringPosition().y + 16, 27, 30,0, b2_kinematicBody);
 
+	
+
 	orange	= App->physics->CreateRectangleSensor(310, 1035, 70, 66, this);
 	blue	= App->physics->CreateRectangleSensor(240, 915,  70, 66, this);
 	green	= App->physics->CreateRectangleSensor(375, 915,  70, 66, this);
@@ -102,29 +135,45 @@ void Colliders::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 	if (last_collided == bodyA && !App->physics->have_touched) return;
 	//Spawn a ball that collides with orange bonus to trigger it
 	bool to_score = true;
+	if (bodyA == green_square_mid) {
+		App->pinball->Green_Box1_Activated= true;
+		LOG("ORANGE")
+	}
+	if (bodyA == green_square_top) {
+		App->pinball->Green_Box2_Activated = true;
+		LOG("ORANGE")
+	}
 	if (bodyA == orange) {
+		App->pinball->Orange_Activated = true;
 		LOG("ORANGE")
 	}
 	else if (bodyA == blue) {
+		App->pinball->Blue_Activated = true;
 		LOG("blue")
 	}
 	else if (bodyA == green) {
+		App->pinball->Green_Activated = true;
 		LOG("green")
 	}
 	else if (bodyA == yellow) {
+		App->pinball->Yellow_Activated = true;
 		LOG("yellow")
 	}
 	else if (bodyA == pink) {
+		App->pinball->Pink_Activated = true;
 		LOG("pink")
 	}
 	else if (bodyA == red) {
+		App->pinball->Red_Activated = true;
 		LOG("red")
 	}
 	else if (bodyA == boy) {
+		App->pinball->Boy_Activated = true;
 		LOG("boy")
 		App->player->score += 100;
 	}
 	else if (bodyA == girl) {
+		App->pinball->Girl_Activated = true;
 		LOG("girl")
 		App->player->score += 100;
 	}
@@ -168,6 +217,7 @@ update_status Colliders::Update()
 		Left_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed);
 		TopLeft_Flipper.Flipper_joint->SetMotorSpeed (flipper_speed);
 		MidLeft_Flipper.Flipper_joint->SetMotorSpeed(flipper_speed);
+		App->audio->PlayFx(Flipper_FX);
 	
 		LOG("A");
 	}
@@ -177,6 +227,7 @@ update_status Colliders::Update()
 		Right_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
 		TopRight_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
 		MidRight_Flipper.Flipper_joint->SetMotorSpeed(-flipper_speed);
+		App->audio->PlayFx(Flipper_FX);
 
 		LOG("D");
 	}
