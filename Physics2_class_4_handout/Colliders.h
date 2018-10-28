@@ -38,6 +38,8 @@ public:
 
 	float flipper_speed = 3.0f * b2_pi; //2PI radians/s
 	float flipper_Speed_Right = -3.0f * b2_pi; //2PI radians/s
+	float flipper_speed_back = -5.0f;
+	float flipper_speed_back_right = 5.0f;
 
 };
 
